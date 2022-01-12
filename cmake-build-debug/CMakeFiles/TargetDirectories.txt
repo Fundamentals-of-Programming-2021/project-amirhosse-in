@@ -1,0 +1,3 @@
+/home/amirhossein/Documents/project-amirhosse-in/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/amirhossein/Documents/project-amirhosse-in/cmake-build-debug/CMakeFiles/project_amirhosse_in.dir
+/home/amirhossein/Documents/project-amirhosse-in/cmake-build-debug/CMakeFiles/edit_cache.dir
