@@ -5,9 +5,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
-const int step = 10;
-void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
-	/*switch (key) {
+const int step = 5;
+void moveCircle(SDL_Keycode key, double* snake_x, double* snake_y) {
+	switch (key) {
 		case SDLK_UP:
 			*snake_y -= step;
 			break;
@@ -20,15 +20,6 @@ void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
 		case SDLK_LEFT:
 			*snake_x -= step;
 			break;
-	}*/
-	if(keys[SDL_SCANCODE_LEFT]){
-		*snake_x -= step;
-	} if(keys[SDL_SCANCODE_RIGHT]){
-		*snake_x += step;
-	} if(keys[SDL_SCANCODE_UP]){
-		*snake_y -= step;
-	}if(keys[SDL_SCANCODE_DOWN]){
-		*snake_y += step;
 	}
 }
 
@@ -49,11 +40,11 @@ int handleEvents(double* snake_x, double* snake_y) {
     	if (event.type == SDL_QUIT)
     	    return EXIT;
         if (event.type == SDL_KEYDOWN){
-			const Uint8* keys = SDL_GetKeyboardState(NULL);
-    		moveCircle(keys , snake_x, snake_y);
+			const Uint8 *state = SDL_GetKeyboardState(NULL);
+			if(state[SDL_SCANCODE_RETURN])
+			printf("you pressed the enter");
+    		moveCircle(event.key.keysym.sym , snake_x, snake_y);
 		}
-		
-
     }
     return 0;
 }
@@ -77,7 +68,7 @@ int main() {
     const double FPS = 30;
     while (1) {
         int start_ticks = SDL_GetTicks();
-		
+
         if (handleEvents(&snake_x, &snake_y) == EXIT) break;
 
     	SDL_SetRenderDrawColor(renderer, 120, 60, 80, 255);
