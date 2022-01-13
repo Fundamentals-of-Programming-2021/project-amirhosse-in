@@ -190,8 +190,14 @@ CMakeFiles/state.dir/main.c.o: main.c \
   /opt/homebrew/include/SDL2/SDL_version.h \
   /opt/homebrew/include/SDL2/SDL_locale.h \
   /opt/homebrew/include/SDL2/SDL_misc.h \
-  /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h
+  /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h \
+  game.h \
+  game.c
 
+
+game.c:
+
+game.h:
 
 /opt/homebrew/include/SDL2/SDL_misc.h:
 

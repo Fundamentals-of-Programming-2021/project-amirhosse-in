@@ -4,102 +4,100 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include "game.h"
+#include "game.c"
+const int FPS = 30;
 
-const int step = 10;
-void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
-	/*switch (key) {
-		case SDLK_UP:
-			*snake_y -= step;
-			break;
-		case SDLK_DOWN:
-			*snake_y += step;
-			break;
-		case SDLK_RIGHT:
-			*snake_x += step;
-			break;
-		case SDLK_LEFT:
-			*snake_x -= step;
-			break;
-	}*/
-	if(keys[SDL_SCANCODE_LEFT]){
-		*snake_x -= step;
-	} if(keys[SDL_SCANCODE_RIGHT]){
-		*snake_x += step;
-	} if(keys[SDL_SCANCODE_UP]){
-		*snake_y -= step;
-	}if(keys[SDL_SCANCODE_DOWN]){
-		*snake_y += step;
-	}
-}
+/*
+ getting keys
+ void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
 
-bool hasEatenFood(double snake_x, double snake_y, double food_x, double food_y, double radius, double rx, double ry) {
-	double distance = sqrt(pow(snake_x - food_x, 2) + pow(snake_y - food_y, 2));
-	return distance < radius + (rx + ry) / 2;
-}
-
-void changeFoodLocation(double * food_x, double * food_y) {
-	*food_x = rand() % 600 + 100;
-	*food_y = rand() % 400 + 100;
-}
+    if(keys[SDL_SCANCODE_LEFT]){
+        *snake_x -= step;
+    } if(keys[SDL_SCANCODE_RIGHT]){
+        *snake_x += step;
+    } if(keys[SDL_SCANCODE_UP]){
+        *snake_y -= step;
+    }if(keys[SDL_SCANCODE_DOWN]){
+        *snake_y += step;
+    }
+}*/
 
 const int EXIT = 12345;
-int handleEvents(double* snake_x, double* snake_y) {
+int handleEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-    	if (event.type == SDL_QUIT)
-    	    return EXIT;
+        if (event.type == SDL_QUIT)
+            return EXIT;
         if (event.type == SDL_KEYDOWN){
-			const Uint8* keys = SDL_GetKeyboardState(NULL);
-    		moveCircle(keys , snake_x, snake_y);
-		}
-		
+            const Uint8* keys = SDL_GetKeyboardState(NULL);
+        }
+        if( event.type == SDL_MOUSEMOTION){
+           // *snake_x=  event.motion.x;
+          //  *snake_y=  event.motion.y;
+        }
+        if(event.type == SDL_MOUSEBUTTONDOWN){
+            if(event.button.button == SDL_BUTTON_LEFT){
+                //*snake_x=  event.button.x;
+               // *snake_y=  event.button.y;
+                printf("you pressed on (%d,%d)\n", event.button.x, event.button.y);
+            }
+        }
+        if(event.type == SDL_MOUSEBUTTONUP){
+            if(event.button.button == SDL_BUTTON_LEFT){
+                //*snake_x=  event.button.x;
+               // *snake_y=  event.button.y;
+                printf("you leaved on (%d,%d)\n", event.button.x, event.button.y);
+            }
+        }
 
     }
     return 0;
 }
 
 int main() {
-	double snake_x = 100;
-	double snake_y = 100;
-	double snake_radius = 20;
-    int snake_score = 0;
 
-	double food_x = 300;
-	double food_y = 300;
-	double food_rx = 15;
-	double food_ry = 10;
 
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = SDL_CreateWindow("workshop", 20, 20, 800, 600, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
+    //adding test picture
+    SDL_Surface* surface = SDL_LoadBMP("./files/coffee.bmp");
+    SDL_SetColorKey(surface,SDL_TRUE,SDL_MapRGB(surface->format,0xFF,0,0xFF));
+    SDL_Texture* coffee = SDL_CreateTextureFromSurface(renderer,surface);
+    surface = SDL_LoadBMP("./files/2.bmp");
+    SDL_Texture* cloud = SDL_CreateTextureFromSurface(renderer,surface);
+    SDL_FreeSurface(surface);
+    
+    SDL_Rect coffee_rectangle;
+    coffee_rectangle.x = 50;
+    coffee_rectangle.y = 100;
+    coffee_rectangle.w = 200;
+    coffee_rectangle.h = 100;
+    SDL_Rect cloud_rectangle;
+    cloud_rectangle.x = 200;
+    cloud_rectangle.y = 200;
+    cloud_rectangle.w = 100;
+    cloud_rectangle.h = 100;
+    
+    //end of adding test picture
     int begining_of_time = SDL_GetTicks();
-    const double FPS = 30;
     while (1) {
         int start_ticks = SDL_GetTicks();
-		
-        if (handleEvents(&snake_x, &snake_y) == EXIT) break;
-
+        if (handleEvents() == EXIT) break;
     	SDL_SetRenderDrawColor(renderer, 120, 60, 80, 255);
     	SDL_RenderClear(renderer);
-
-    	if (hasEatenFood(snake_x, snake_y, food_x, food_y, snake_radius, food_rx, food_ry)) {
-    	   	snake_radius *= 1.2;
-            snake_score++;
-    	   	changeFoodLocation(&food_x, &food_y);
-    	}
-
-    	filledCircleRGBA(renderer, snake_x, snake_y, snake_radius, 0, 100, 100, 255);
-    	filledEllipseRGBA(renderer, food_x, food_y, food_rx, food_ry, rand() % 255, rand() % 255, rand() % 255, 255);
+        coffee_rectangle.x++;
         char* buffer = malloc(sizeof(char) * 50);
-	sprintf(buffer, "amnam's score: %d   elapsed time: %dms", snake_score, start_ticks - begining_of_time);
-        /* printf("%s", buffer); */
+        sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
+        SDL_RenderCopy(renderer,cloud,NULL,&cloud_rectangle);
+        SDL_RenderCopy(renderer,coffee,NULL,&coffee_rectangle);
     	SDL_RenderPresent(renderer);
-
-        while (SDL_GetTicks() - start_ticks < 1000 / FPS);
+        SDL_Delay ( 1000 / FPS);
     }
-
+    SDL_DestroyTexture(cloud);
+    SDL_DestroyTexture(coffee);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
