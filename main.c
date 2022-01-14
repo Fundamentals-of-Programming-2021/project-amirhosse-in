@@ -55,7 +55,6 @@ int handleEvents() {
 
 int main() {
 
-
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -83,15 +82,15 @@ int main() {
     while (1) {
         int start_ticks = SDL_GetTicks();
         if (handleEvents() == EXIT) break;
-    	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+    	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     	SDL_RenderClear(renderer);
+        draw_map(renderer);
         coffee_rectangle.x++;
-        boxColor(renderer,100, 100,110,110,0xff000000);
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
-        SDL_RenderCopy(renderer,cloud,NULL,&cloud_rectangle);
-        SDL_RenderCopy(renderer,coffee,NULL,&coffee_rectangle);
+       // SDL_RenderCopy(renderer,cloud,NULL,&cloud_rectangle);
+       // SDL_RenderCopy(renderer,coffee,NULL,&coffee_rectangle);
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS);
     }
