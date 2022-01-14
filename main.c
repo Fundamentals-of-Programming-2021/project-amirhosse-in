@@ -6,7 +6,10 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "game.h"
 #include "game.c"
-const int FPS = 30;
+
+const int FPS = 60 ;
+const int window_height = 800;
+const int window_width = 800;
 
 /*
  getting keys
@@ -33,21 +36,16 @@ int handleEvents() {
             const Uint8* keys = SDL_GetKeyboardState(NULL);
         }
         if( event.type == SDL_MOUSEMOTION){
-           // *snake_x=  event.motion.x;
-          //  *snake_y=  event.motion.y;
+                //event.motion.x and event.motion.y 
         }
         if(event.type == SDL_MOUSEBUTTONDOWN){
             if(event.button.button == SDL_BUTTON_LEFT){
-                //*snake_x=  event.button.x;
-               // *snake_y=  event.button.y;
-                printf("you pressed on (%d,%d)\n", event.button.x, event.button.y);
+                printf("pressed on (%d,%d)\n", event.button.x, event.button.y);
             }
         }
         if(event.type == SDL_MOUSEBUTTONUP){
             if(event.button.button == SDL_BUTTON_LEFT){
-                //*snake_x=  event.button.x;
-               // *snake_y=  event.button.y;
-                printf("you leaved on (%d,%d)\n", event.button.x, event.button.y);
+                printf("finished on (%d,%d)\n", event.button.x, event.button.y);
             }
         }
 
@@ -59,7 +57,7 @@ int main() {
 
 
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window* window = SDL_CreateWindow("workshop", 20, 20, 800, 600, SDL_WINDOW_OPENGL);
+	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //adding test picture
     SDL_Surface* surface = SDL_LoadBMP("./files/coffee.bmp");
@@ -68,7 +66,7 @@ int main() {
     surface = SDL_LoadBMP("./files/2.bmp");
     SDL_Texture* cloud = SDL_CreateTextureFromSurface(renderer,surface);
     SDL_FreeSurface(surface);
-    
+    game_generator();
     SDL_Rect coffee_rectangle;
     coffee_rectangle.x = 50;
     coffee_rectangle.y = 100;
@@ -85,9 +83,10 @@ int main() {
     while (1) {
         int start_ticks = SDL_GetTicks();
         if (handleEvents() == EXIT) break;
-    	SDL_SetRenderDrawColor(renderer, 120, 60, 80, 255);
+    	SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
     	SDL_RenderClear(renderer);
         coffee_rectangle.x++;
+        boxColor(renderer,100, 100,110,110,0xff000000);
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);

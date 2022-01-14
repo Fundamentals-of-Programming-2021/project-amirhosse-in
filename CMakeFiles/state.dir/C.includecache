@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/amirhossein/Documents/project-amirhosse-in/game.c
+game.h
+/home/amirhossein/Documents/project-amirhosse-in/game.h
+time.h
+-
+
+/home/amirhossein/Documents/project-amirhosse-in/game.h
+stdio.h
+-
+
 /home/amirhossein/Documents/project-amirhosse-in/main.c
 stdio.h
 -
@@ -19,4 +29,8 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
+game.h
+/home/amirhossein/Documents/project-amirhosse-in/game.h
+game.c
+/home/amirhossein/Documents/project-amirhosse-in/game.c
 
