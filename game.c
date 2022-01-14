@@ -102,15 +102,25 @@ int fill_city(int row, int column,int city_id){
     return city_border_finder(row, column, city_id);
 }
 
+void map_generator(int city_count){
+    int n =0;
+    for(int i=0;i<city_count;i++){
+        //n equals to borders count here
+        n = find_big_area(n);
+        if(n != -1){
+            //n equals to best border point to fill city from
+            n = fill_city(city_border[n][0], city_border[n][1], i+1);
+        }else {
+            
+        }
+    }
+}
+
 void game_generator(){
     srand(time(NULL));
     int players_count = rand()%4+1;
     int city_count = rand()%5+35;
-    int n =0;
-    for(int i=0;i<city_count;i++){
-        n = find_big_area(n);
-        n = fill_city(city_border[n][0], city_border[n][1], i+1);
-    }
+    map_generator(city_count);
 }
 void dfs_for_calculate_area(int row, int column,int flag[][map_width/map_cell_side], int number, int* count){
     flag[row][column] = 1;
@@ -134,7 +144,7 @@ int find_big_area(int n){
         dfs_for_calculate_area(city_border[out][0], city_border[out][1], flag, 0, &count);
         if(count>=100) break;
     }
-    return out;
+    return out==n?-1:out;
 }
 
 int color_picker(int id){
@@ -171,7 +181,7 @@ void draw_map(SDL_Renderer* renderer){
         for(int j=0;j<map_width/map_cell_side;j++){
             x = j*map_cell_side + width_base;
             y = i*map_cell_side + height_base; 
-            boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,map[i][j] == 0? 0 : color_picker(map[i][j]%11+1));
+            boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,map[i][j] == 0? 0 : color_picker(map[i][j]%11+2));
         }
     }
 }
