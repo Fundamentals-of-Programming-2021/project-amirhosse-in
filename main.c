@@ -14,7 +14,6 @@ const int window_width = 800;
 /*
  getting keys
  void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
-
     if(keys[SDL_SCANCODE_LEFT]){
         *snake_x -= step;
     } if(keys[SDL_SCANCODE_RIGHT]){
