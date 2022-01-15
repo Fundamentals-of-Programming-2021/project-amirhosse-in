@@ -103,10 +103,10 @@ int fill_city(int row, int column,int city_id){
     return city_border_finder(row, column, city_id);
 }
 
-void map_generator(int city_count){
+void map_generator(int* city_count){
     int n =0;
     int final_counts = 0;
-    for(int i=0;i<city_count;i++){
+    for(int i=0;i<*city_count;i++){
         //n equals to borders count here
         n = find_big_area(n);
         if(n != -1){
@@ -123,15 +123,16 @@ void map_generator(int city_count){
             }
         }
     }
-    city_count = final_counts;
+    *city_count = final_counts;
     specify_border();
+    //save_map("./map1.map");
 }
 
 void game_generator(){
     srand(time(NULL));
     int players_count = rand()%4+1;
     int city_count = rand()%5+40;
-    map_generator(city_count);
+    map_generator(&city_count);
     printf("we could generete %d cities\n", city_count);
 }
 void dfs_for_calculate_area(int row, int column,int flag[][map_width/map_cell_side], int number, int* count){
