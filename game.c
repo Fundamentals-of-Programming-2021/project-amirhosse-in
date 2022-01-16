@@ -9,64 +9,40 @@
 #include "./cfiles/io.c"
 #include "./cfiles/objects.c"
 #include "./cfiles/map.c"
-///consts
-#define map_width 600
-#define map_height 600
-#define map_cell_side 5
-
 //protypes
 void draw_camps(SDL_Renderer* renderer);
-
-
-//global variables
-int map[map_height/map_cell_side][map_width/map_cell_side] = {0};
-
-City* cities;
-int cities_count = 0;
-int cities_available[50];// cities_available[city_id] = 1
 
 //this function initialize primary thing like generating map and etc.
 void game_generator(){
     srand(time(NULL));
-    int players_count = rand()%4+1;
     int city_count = rand()%5+40;
 
-    map_generator(map, &city_count);
-    find_camps(map , cities_available,&cities_count,  cities);
-
-    save_map(map_height/map_cell_side, map_width/map_cell_side, map , "map1.map");
+    map_generator( &city_count);
+    cities = find_camps();
+    clean_map_from_non_camps_city();
+    assign_camps_to_players();
+    save_map("map1.map");
     printf("we could generete %d cities\n", cities_count);
 }
-//this function is used for drawing map and border (negative numbers specifies borders)
+//this function is used for drawing map and border (negative numbers specifies borders) & this function uses id_to_city_index() to determine owner of city
 int color_picker(int id){
     int out = 0;
-    switch(id){
-        case 0:out = 0xff646464;break;
-        case  1: out = 0xFF2828C6;break;
-        case -1: out = 0xFF1C1CB6;break;
-        case  2: out = 0xff8C144A;break;
-        case 3:out = 0xff933528;break;
-        case -3: out= 0xff7E231A;break;
-        case 4:out = 0xffBD7702;break;
-        case-4:out = 0xff9B5701;break;
-        case 5:out = 0xff5C6900;break;
-        case-5:out = 0xff404D00;break;
-        case 6:out = 0xff2F8B55;break;
-        case -6:out = 0xff1E6933;break;
-        case 7:out = 0xff25A8F9;break;
-        case-7:out = 0xff177FF5;break;
-        case 8:out = 0xff4F4737;break;
-        case -8:out= 0xff383226;break;
-        case 9:out = 0xff3d2f21;break;
-        case 10:out = 0xffa6a595;break;
-        case 11:out = 0xff778F14;break;
-        case 12:out = 0xff000000;break;
-        case 13:out = 0xffff0000;break;
-        case 14:out = 0xffff0000;break;
-        case 15:out = 0xffff0000;break;
-        case 16:out = 0xffff0000;break;
-        case 17:out = 0xffff0000;break;
-        default :out = 0x00646464;break;
+    int x = id_to_city_index(id);
+    //printf("%d\n",x);
+    switch (x)
+    {
+        case -100:out = 0;break;
+        case 90:out = 0x414C6D;break;
+        case -90:out = 0x23273E;break;
+        case 1:out=0x3539E5;break;
+        case -1:out=0x1C1CB7;break;
+        case 2:out=0x9F3F30;break;
+        case -2:out=0x7E231A;break;
+        case 3:out=0x6B7900;break;
+        case -3:out=0x404D00;break;
+        case 4:out=0x7A6E54;break;
+        case -4:out=0x383226;break;
+        default: printf("%d\n",x);break;
     }
     return out;
 }
@@ -80,10 +56,10 @@ void draw_map(SDL_Renderer* renderer){
         for(int j=0;j<map_width/map_cell_side;j++){
             x = j*map_cell_side + width_base;
             y = i*map_cell_side + height_base; 
-            boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,map[i][j] == 0? 0 : color_picker(map[i][j]%10));
+            boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,color_picker(map[i][j]));
         }
     }
-    //draw_camps(renderer);
+    draw_camps(renderer);
 }
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
@@ -95,7 +71,13 @@ void draw_camps(SDL_Renderer* renderer){
         r.y = y;
         r.w = 25;
         r.h = 25;
+        SDL_SetRenderDrawColor(renderer, 0,255,0,255);
         SDL_RenderFillRect(renderer, &r);
+
+        char* buffer = malloc(sizeof(char) * 50);
+        sprintf(buffer, "team: %d, id: %d", cities[i].team, cities[i].id);
+        stringRGBA(renderer, x, y-5, buffer, 0, 0, 0, 255);
+        free(buffer);
     }
 }
 //this function draw a mouse curser and moving line
@@ -107,16 +89,14 @@ void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed
         x/=map_cell_side;
         y/=map_cell_side;
         if(map[y][x] != 0){
-            circleColor(renderer, x_on_screen, y_on_screen, 10,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
-            circleColor(renderer, x_on_screen, y_on_screen, 9,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
-            circleColor(renderer, x_on_screen, y_on_screen, 8,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
-            filledCircleColor(renderer, x_on_screen, y_on_screen, 3,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
+            circleColor(renderer, x_on_screen, y_on_screen, 10,map[y][x] == 0? 0 : color_picker(map[y][x]));
+            circleColor(renderer, x_on_screen, y_on_screen, 9,map[y][x] == 0? 0 : color_picker(map[y][x]));
+            circleColor(renderer, x_on_screen, y_on_screen, 8,map[y][x] == 0? 0 :  color_picker(map[y][x]));
+            filledCircleColor(renderer, x_on_screen, y_on_screen, 3,map[y][x] == 0? 0 : color_picker(map[y][x]));
         }
         if(is_pressed){
             SDL_RenderDrawLine(renderer, pressed_x, pressed_y, x_on_screen,y_on_screen);
         }
     }
 }
-
-
 

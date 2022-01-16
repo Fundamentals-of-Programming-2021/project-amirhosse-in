@@ -88,6 +88,7 @@ int main() {
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
        // SDL_RenderCopy(renderer,cloud,NULL,&cloud_rectangle);
        // SDL_RenderCopy(renderer,coffee,NULL,&coffee_rectangle);
+        free(buffer);
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS);
     }

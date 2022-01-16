@@ -5,7 +5,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-
+#include "consts.c"
 void put_number_on_file_pointer(int a, FILE* fp){
     if(a<0) a*=-1;
     if(a==0){
@@ -28,10 +28,10 @@ void put_number_on_file_pointer(int a, FILE* fp){
     fputc(',', fp);
 }
 
-void save_map(int rows, int coloumns,int map[][coloumns], char* path){
+void save_map( char* path){
     FILE* fp =  fopen(path , "w+");
-    for(int i=0;i<rows;i++){
-        for(int j=0;j<coloumns;j++){
+    for(int i=0;i<map_height/map_cell_side;i++){
+        for(int j=0;j<map_width/map_cell_side;j++){
             put_number_on_file_pointer(map[i][j], fp);
         }
         fputc('\n', fp);

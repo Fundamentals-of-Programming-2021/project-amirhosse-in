@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
+stdio.h
+-
+
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
 time.h
 -
@@ -21,6 +25,8 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
+consts.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
 time.h
@@ -37,6 +43,8 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
+consts.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/objects.c
 time.h
@@ -53,6 +61,8 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
+consts.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
 
 /home/amirhossein/Documents/project-amirhosse-in/game.c
 game.h
