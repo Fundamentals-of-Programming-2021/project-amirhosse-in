@@ -31,17 +31,17 @@ int color_picker(int id){
     //printf("%d\n",x);
     switch (x)
     {
-        case -100:out = 0;break;
-        case 90:out = 0x414C6D;break;
-        case -90:out = 0x23273E;break;
-        case 1:out=0x3539E5;break;
-        case -1:out=0x1C1CB7;break;
-        case 2:out=0x9F3F30;break;
-        case -2:out=0x7E231A;break;
-        case 3:out=0x6B7900;break;
-        case -3:out=0x404D00;break;
-        case 4:out=0x7A6E54;break;
-        case -4:out=0x383226;break;
+        case -100:out = 0xff;break;
+        case 90:out = 0xff414C6D;break;
+        case -90:out = 0xff23273E;break;
+        case 1:out=0xff3539E5;break;
+        case -1:out=0xff1C1CB7;break;
+        case 2:out=0xff9F3F30;break;
+        case -2:out=0xff7E231A;break;
+        case 3:out=0xff6B7900;break;
+        case -3:out=0xff404D00;break;
+        case 4:out=0xff7A6E54;break;
+        case -4:out=0xff383226;break;
         default: printf("%d\n",x);break;
     }
     return out;
@@ -74,10 +74,6 @@ void draw_camps(SDL_Renderer* renderer){
         SDL_SetRenderDrawColor(renderer, 0,255,0,255);
         SDL_RenderFillRect(renderer, &r);
 
-        char* buffer = malloc(sizeof(char) * 50);
-        sprintf(buffer, "team: %d, id: %d", cities[i].team, cities[i].id);
-        stringRGBA(renderer, x, y-5, buffer, 0, 0, 0, 255);
-        free(buffer);
     }
 }
 //this function draw a mouse curser and moving line
@@ -89,10 +85,10 @@ void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed
         x/=map_cell_side;
         y/=map_cell_side;
         if(map[y][x] != 0){
-            circleColor(renderer, x_on_screen, y_on_screen, 10,map[y][x] == 0? 0 : color_picker(map[y][x]));
-            circleColor(renderer, x_on_screen, y_on_screen, 9,map[y][x] == 0? 0 : color_picker(map[y][x]));
-            circleColor(renderer, x_on_screen, y_on_screen, 8,map[y][x] == 0? 0 :  color_picker(map[y][x]));
-            filledCircleColor(renderer, x_on_screen, y_on_screen, 3,map[y][x] == 0? 0 : color_picker(map[y][x]));
+            circleColor(renderer, x_on_screen, y_on_screen, 10,map[y][x] == 0? 0 :color_picker(-abs(map[y][x])));
+            circleColor(renderer, x_on_screen, y_on_screen, 9,map[y][x] == 0? 0 : color_picker(-abs(map[y][x])));
+            circleColor(renderer, x_on_screen, y_on_screen, 8,map[y][x] == 0? 0 :color_picker(-abs(map[y][x])));
+            filledCircleColor(renderer, x_on_screen, y_on_screen, 3,map[y][x] == 0? 0 : color_picker(-abs(map[y][x])));
         }
         if(is_pressed){
             SDL_RenderDrawLine(renderer, pressed_x, pressed_y, x_on_screen,y_on_screen);
@@ -100,3 +96,10 @@ void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed
     }
 }
 
+void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
+    base_x -= 100; base_x /= map
+    base_y -= 100;
+    dest_x -= 100;
+    dest_y -= 100;
+
+}
