@@ -9,8 +9,12 @@
 
 const int FPS = 60 ;
 const int window_height = 800;
-const int window_width = 800;
-
+const int window_width = 1000;
+int current_mouse_x = 0;
+int current_mouse_y = 0;
+int is_mouse_pressed = 0;
+int pressed_x = 0;
+int pressed_y = 0;
 /*
  getting keys
  void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
@@ -26,7 +30,7 @@ const int window_width = 800;
 }*/
 
 const int EXIT = 12345;
-int handleEvents() {
+int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT)
@@ -36,15 +40,19 @@ int handleEvents() {
         }
         if( event.type == SDL_MOUSEMOTION){
                 //event.motion.x and event.motion.y 
+                current_mouse_x = event.motion.x;
+                current_mouse_y = event.motion.y;
         }
         if(event.type == SDL_MOUSEBUTTONDOWN){
             if(event.button.button == SDL_BUTTON_LEFT){
-                printf("pressed on (%d,%d)\n", event.button.x, event.button.y);
+                is_mouse_pressed = 1;
+                pressed_x = event.button.x;
+                pressed_y = event.button.y;
             }
         }
         if(event.type == SDL_MOUSEBUTTONUP){
             if(event.button.button == SDL_BUTTON_LEFT){
-                printf("finished on (%d,%d)\n", event.button.x, event.button.y);
+                is_mouse_pressed = 0;
             }
         }
 
@@ -65,26 +73,16 @@ int main() {
     SDL_Texture* cloud = SDL_CreateTextureFromSurface(renderer,surface);
     SDL_FreeSurface(surface);
     game_generator();
-    SDL_Rect coffee_rectangle;
-    coffee_rectangle.x = 50;
-    coffee_rectangle.y = 100;
-    coffee_rectangle.w = 200;
-    coffee_rectangle.h = 100;
-    SDL_Rect cloud_rectangle;
-    cloud_rectangle.x = 200;
-    cloud_rectangle.y = 200;
-    cloud_rectangle.w = 100;
-    cloud_rectangle.h = 100;
-    
+
     //end of adding test picture
     int begining_of_time = SDL_GetTicks();
     while (1) {
         int start_ticks = SDL_GetTicks();
-        if (handleEvents() == EXIT) break;
+        if (handleEvents(renderer) == EXIT) break;
     	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     	SDL_RenderClear(renderer);
         draw_map(renderer);
-        coffee_rectangle.x++;
+        mouse_hover(renderer, current_mouse_x,current_mouse_y,pressed_x, pressed_y, is_mouse_pressed);
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);

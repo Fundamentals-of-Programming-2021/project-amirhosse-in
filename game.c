@@ -6,164 +6,38 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-
+#include "./cfiles/io.c"
+#include "./cfiles/objects.c"
+#include "./cfiles/map.c"
 ///consts
 #define map_width 600
 #define map_height 600
 #define map_cell_side 5
+
+//protypes
+void draw_camps(SDL_Renderer* renderer);
+
+
 //global variables
 int map[map_height/map_cell_side][map_width/map_cell_side] = {0};
-int city_border[4000][2];
-//protypes
-int find_big_area(int n);
-void specify_border();
-void save_map(char* path);
-typedef struct Soldier{
-    int x;
-    int y;
-    int speed;
-    int team;
-    
-} Soldier;
 
-//1 means white
-typedef struct City{
-    int id;
-    int x;
-    int y;
-    int team;
-    int soldier_counts;
-    int growth_rate;
-} City;
+City* cities;
+int cities_count = 0;
+int cities_available[50];// cities_available[city_id] = 1
 
-typedef struct Game{
-    int players_count;
-    
-} Game;
-
-
-
-void dfs_border(int row, int column, int map_flag[][map_width/map_cell_side], int* border_count, int city_id){
-    if(map[row][column] == 0){
-        city_border[*border_count][0] = row;
-        city_border[*border_count][1] = column;
-        *border_count += 1;
-        return ;
-    }
-    for(int i=-1; i<=1;i++){
-        for(int j=-1; j<=1; j++){
-            if(row + i >= 0 && row + i < map_height/map_cell_side 
-            && column +j >= 0 && column + j < map_width/map_cell_side
-            && map_flag[row+i][column+j] == 0 
-            && (map[row+i][column+j] == 0 || map[row+i][column+j] == city_id) ){
-                map_flag[row+i][column+j] = 1;
-                dfs_border(row+i, column+j, map_flag, border_count, city_id); 
-            }
-        }
-    }
-}
-
-int city_border_finder(int row, int column, int city_id){
-    int map_flag[map_height/map_cell_side][map_width/map_cell_side] = {0};
-    int border_count = 0;
-    dfs_border(row, column, map_flag, &border_count, city_id);
-    return border_count;
-}
-
-
-int fill_city(int row, int column,int city_id){
-    int city_area = rand()%100 + 250;
-    map[row][column] = city_id;
-    int border_count = 0;
-    //primary fill the city
-    
-    while(city_area--){
-        border_count = city_border_finder(row, column, city_id);
-        if(border_count!=0){
-            int new_cell = rand()%border_count;
-            map[ city_border[new_cell][0] ][ city_border[new_cell][1] ] = city_id;
-        }else {
-            //handle the small map
-        }
-    }
-    //full fill the city
-    for(int i=0;i<map_height/map_cell_side;i++){
-        for(int j=0;j<map_width/map_cell_side;j++){
-            if(map[i][j] == 0){
-                int flag = 0;
-                for(int p=-1; p<=1;p++){
-                    for(int q=-1; q<=1; q++){
-                        if(i+p >=0 && i+p < map_height/map_cell_side 
-                        && j+q >= 0 && j+q < map_width/map_cell_side
-                        && map[i+p][j+q] == city_id) flag ++;
-                    }
-                }
-                if( /*( (i*j == 0 || i==map_height/map_cell_side-1 || j==map_width/map_cell_side-1) && flag>=2 ) ||*/ (i*j != 0 && flag >= 5) ) map[i][j] = city_id;
-            }
-        }
-    }
-    return city_border_finder(row, column, city_id);
-}
-
-void map_generator(int* city_count){
-    int n =0;
-    int final_counts = 0;
-    for(int i=0;i<*city_count;i++){
-        //n equals to borders count here
-        n = find_big_area(n);
-        if(n != -1){
-            //n equals to best border point to fill city from
-            n = fill_city(city_border[n][0], city_border[n][1], i+1);
-            final_counts++;
-        }else {
-            for(int j=0;j<map_width/map_cell_side;j++){
-                if(map[map_height/map_cell_side-1][j] == 0){
-                    n = fill_city(map_height/map_cell_side-1, j, i+1);
-                    final_counts++;
-                    break;
-                }
-            }
-        }
-    }
-    *city_count = final_counts;
-    specify_border();
-    save_map("./map1.map");
-}
-
+//this function initialize primary thing like generating map and etc.
 void game_generator(){
     srand(time(NULL));
     int players_count = rand()%4+1;
     int city_count = rand()%5+40;
-    map_generator(&city_count);
-    printf("we could generete %d cities\n", city_count);
+
+    map_generator(map, &city_count);
+    find_camps(map , cities_available,&cities_count,  cities);
+
+    save_map(map_height/map_cell_side, map_width/map_cell_side, map , "map1.map");
+    printf("we could generete %d cities\n", cities_count);
 }
-void dfs_for_calculate_area(int row, int column,int flag[][map_width/map_cell_side], int number, int* count){
-    flag[row][column] = 1;
-    *count+=1;
-    for(int i=-1;i<=1;i++){
-        for(int j=-1;j<=1;j++){
-            if(row+i >=0 && row+i < map_height/map_cell_side
-            && column+j >=0 && column+j < map_width/map_cell_side
-            && flag[row+i][column+j] == 0 && map[row+i][column+j] == number){
-                dfs_for_calculate_area(row+i, column+j, flag , number, count);
-            }
-        }
-    }
-}
-//find a big area from border city to fill a new city
-int find_big_area(int n){
-    int out =0;
-    for(out ; out < n; out++){
-        int flag[map_height/map_cell_side][map_width/map_cell_side] = {0};
-        int count = 0;
-        dfs_for_calculate_area(city_border[out][0], city_border[out][1], flag, 0, &count);
-        if(count>=100) break;
-    }
-    return out==n?-1:out;
-}
-int find_camps(){
-    
-}
+//this function is used for drawing map and border (negative numbers specifies borders)
 int color_picker(int id){
     int out = 0;
     switch(id){
@@ -197,23 +71,7 @@ int color_picker(int id){
     return out;
 }
 
-void specify_border(){
-    for(int i=0; i< map_height/map_cell_side;i++){
-        for(int j=0;j<map_width/map_cell_side;j++){
-            if(map[i][j] !=0){
-                int flag = 0;
-                for(int q=-1;q<=1;q++){
-                    for(int p=-1;p<=1;p++){
-                        if(i+q >=0 && i+q< map_height/map_cell_side
-                        && j+p >=0 && j+p< map_width/map_cell_side
-                        && map[i+q][j+p] != map[i][j] && map[i+q][j+p] != -1*map[i][j]) flag = 1;
-                    }
-                }
-                if(flag == 1) map[i][j] *= -1;
-            }
-        }
-    }
-}
+//this function draws map on renderer
 void draw_map(SDL_Renderer* renderer){
     int height_base = 100;
     int width_base = 100;
@@ -225,40 +83,40 @@ void draw_map(SDL_Renderer* renderer){
             boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,map[i][j] == 0? 0 : color_picker(map[i][j]%10));
         }
     }
+    //draw_camps(renderer);
 }
-
-
-//io.c
-void put_number_on_file_pointer(int a, FILE* fp){
-    if(a<0) a*=-1;
-    if(a==0){
-        fputc('0',fp);
-        fputc(',',fp);
-        return;
+//this function will be called by draw_map() and draws camps
+void draw_camps(SDL_Renderer* renderer){
+    for(int i=0;i<cities_count;i++){
+        int x = cities[i].x * map_cell_side + 100;
+        int y = cities[i].y * map_cell_side + 100;
+        SDL_Rect r;
+        r.x = x; 
+        r.y = y;
+        r.w = 25;
+        r.h = 25;
+        SDL_RenderFillRect(renderer, &r);
     }
-    int digit_count = 0;
-    int reversed_number = 0;
-    while(a!=0){
-        digit_count++;
-        reversed_number*=10;
-        reversed_number+=a%10;
-        a/=10;
-    }
-    for(int i=0;i<digit_count;i++){
-        fputc( (reversed_number%10)+'0', fp);
-        reversed_number/=10;
-    }
-    fputc(',', fp);
 }
-
-void save_map(char* path){
-    FILE* fp =  fopen(path , "w+");
-    for(int i=0;i<map_height/map_cell_side;i++){
-        for(int j=0;j<map_width/map_cell_side;j++){
-            put_number_on_file_pointer(map[i][j], fp);
+//this function draw a mouse curser and moving line
+void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed_y, int is_pressed){
+    if(x>=100 && x<700 && y>=100 && y<700){
+        int x_on_screen = x, y_on_screen = y;
+        x-=100;
+        y-=100;
+        x/=map_cell_side;
+        y/=map_cell_side;
+        if(map[y][x] != 0){
+            circleColor(renderer, x_on_screen, y_on_screen, 10,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
+            circleColor(renderer, x_on_screen, y_on_screen, 9,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
+            circleColor(renderer, x_on_screen, y_on_screen, 8,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
+            filledCircleColor(renderer, x_on_screen, y_on_screen, 3,map[y][x] == 0? 0 : color_picker(-abs(map[y][x]%10)));
         }
-        fputc('\n', fp);
+        if(is_pressed){
+            SDL_RenderDrawLine(renderer, pressed_x, pressed_y, x_on_screen,y_on_screen);
+        }
     }
-    fclose(fp);
 }
+
+
 

@@ -2,6 +2,7 @@
     "files.associations": {
         "stdbool.h": "c",
         "sdl2_gfxprimitives.h": "c",
-        "game.h": "c"
+        "game.h": "c",
+        "time.h": "c"
     }
 }
