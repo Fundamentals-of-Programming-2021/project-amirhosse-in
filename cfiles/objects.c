@@ -7,11 +7,11 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "consts.c"
 
-
+//this function is used by find_camps() to check a cell is appropriate for a camp or not
 int check_is_valid_camp(int row, int column){
     int base_color = map[row][column];
     int flag = 1;
-    for(int i=-2;i <7;i++){
+    for(int i=-3;i <7;i++){
         for(int j=-2; j< 7;j++){
             if(row+i < map_height/map_cell_side && column+j < map_width/map_cell_side
             && row+i >=0 && column+j >=0){
@@ -22,8 +22,7 @@ int check_is_valid_camp(int row, int column){
     return flag;
 }
 
-
-
+//this functions searches for big cities wich can have a camp
 City* find_camps(){
 
     City* cities;
@@ -38,8 +37,10 @@ City* find_camps(){
                 cities[(cities_count)-1].id = map[i][j];
                 cities[(cities_count)-1].y = i;
                 cities[(cities_count)-1].x = j;
-                cities[(cities_count)-1].soldier_counts  = 0;
+                cities[(cities_count)-1].soldier_counts  = primary_anti_soldier_count;
                 cities[(cities_count)-1].team = 0;
+                cities[(cities_count)-1].soldiers_to_move = 0;
+                cities[(cities_count)-1].growth_rate = 0;
             }
         }
     }
@@ -53,21 +54,25 @@ void assign_camps_to_players(){
         int a = rand()%cities_count;
         if(cities[a].team == 0){
             cities[a].team = x;
+            cities[a].soldier_counts = primary_soldier_count;
+            cities[a].growth_rate = growth_rate_per_second;
         }else x++;
     }
 }
-//this function recives map[i][j] and return -100 if map[i][j]=0 and returns 90(or -90 for border) if that city doesn't belong to any player else return player_id
+//this function recives non zero abs(map[i][j]) and return index of city 
 int id_to_city_index(int map_number){
-    int flag =1;
-    if(map_number == 0) return -100;
-    if(map_number < 0){
-        map_number*=-1;
-        flag = -1;
-    }
     for(int i=0;i <cities_count;i++){
         if(cities[i].id == map_number ){
-            if(cities[i].team == 0) return flag*90;  
-            return flag*cities[i].team;
+            return i;
         }
+    }
+    return -1;
+}
+
+//this function generates [count] soldiers and return a Soldier*
+Soldier* generate_soldier(int count, int team, int city_id){
+    Soldier* out = (Soldier*) malloc(sizeof(Soldier) * count);
+    for(int i=0;i < count;i++){
+        
     }
 }

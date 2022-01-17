@@ -10,11 +10,7 @@
 const int FPS = 60 ;
 const int window_height = 800;
 const int window_width = 1000;
-int current_mouse_x = 0;
-int current_mouse_y = 0;
-int is_mouse_pressed = 0;
-int pressed_x = 0;
-int pressed_y = 0;
+
 /*
  getting keys
  void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
@@ -53,6 +49,7 @@ int handleEvents(SDL_Renderer* renderer) {
         if(event.type == SDL_MOUSEBUTTONUP){
             if(event.button.button == SDL_BUTTON_LEFT){
                 is_mouse_pressed = 0;
+                detect_attack(pressed_x, pressed_y, event.button.x, event.button.y);
             }
         }
 

@@ -3,8 +3,11 @@
 typedef struct Soldier{
     int x;
     int y;
-    int speed;
+    int speed_x;
+    int speed_y;
     int team;
+    int city_id;
+
     
 } Soldier;
 
@@ -14,6 +17,7 @@ typedef struct City{
     int y;
     int team;//1 means white
     int soldier_counts;
+    int soldiers_to_move;
     int growth_rate;
 } City;
 
@@ -34,3 +38,13 @@ int cities_count = 0;
 int cities_available[50];
 
 int players_count = 4;
+
+int primary_anti_soldier_count = 30;
+int primary_soldier_count = 40;
+int growth_rate_per_second = 3;
+
+int current_mouse_x = 0;
+int current_mouse_y = 0;
+int is_mouse_pressed = 0;
+int pressed_x = 0;
+int pressed_y = 0;

@@ -27,8 +27,13 @@ void game_generator(){
 //this function is used for drawing map and border (negative numbers specifies borders) & this function uses id_to_city_index() to determine owner of city
 int color_picker(int id){
     int out = 0;
-    int x = id_to_city_index(id);
-    //printf("%d\n",x);
+    int x;
+    if(id==0) x = -100;
+    else{ 
+        x = id_to_city_index(abs(id));
+        if(cities[x].team != 0) x = cities[x].team * (id < 0? -1 : 1);
+        else x = 90 * (id < 0? -1 : 1);
+    }
     switch (x)
     {
         case -100:out = 0xff;break;
@@ -42,7 +47,7 @@ int color_picker(int id){
         case -3:out=0xff404D00;break;
         case 4:out=0xff7A6E54;break;
         case -4:out=0xff383226;break;
-        default: printf("%d\n",x);break;
+        default: printf("we found a bug here\n");break;
     }
     return out;
 }
@@ -73,7 +78,9 @@ void draw_camps(SDL_Renderer* renderer){
         r.h = 25;
         SDL_SetRenderDrawColor(renderer, 0,255,0,255);
         SDL_RenderFillRect(renderer, &r);
-
+        char* buffer = (char*) malloc(sizeof(char) * 20);
+        sprintf(buffer, "%d", cities[i].id);
+        stringRGBA(renderer, x +2 , y + 3, buffer, 0,0,0,255);
     }
 }
 //this function draw a mouse curser and moving line
@@ -97,9 +104,22 @@ void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed
 }
 
 void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
-    base_x -= 100; base_x /= map
-    base_y -= 100;
-    dest_x -= 100;
-    dest_y -= 100;
-
+    if(dest_x >= 100 && dest_y >= 100 && base_x >= 100 && base_y >= 100
+    && dest_x < 700 && dest_y < 700 && base_x < 700 && base_y < 700){
+        base_x -= 100; base_x /= map_cell_side;
+        base_y -= 100; base_y /= map_cell_side;
+        dest_x -= 100; dest_x /= map_cell_side;
+        dest_y -= 100; dest_y /= map_cell_side;
+        
+        if(map[dest_y][dest_x] * map[base_y][base_x] == 0 || abs(map[dest_y][dest_x]) == abs(map[base_y][base_x])){
+            //invalid attack
+            printf("it wasn't a valid attack\n");
+        }else{
+            printf("you attacked from %d to %d\n", map[base_y][base_x],map[dest_y][dest_x]);
+        }
+    }
+    else {
+        //invalid attack
+    }
 }
+
