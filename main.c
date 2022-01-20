@@ -6,7 +6,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "game.h"
 #include "game.c"
-
+//echo we are testing this git repo
 const int FPS = 60 ;
 const int window_height = 800;
 const int window_width = 1000;
