@@ -27,6 +27,8 @@ SDL2/SDL2_gfxPrimitives.h
 -
 consts.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
+map.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
 time.h

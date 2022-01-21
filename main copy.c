@@ -80,7 +80,7 @@ int main() {
     	filledCircleRGBA(renderer, snake_x, snake_y, snake_radius, 0, 100, 100, 255);
     	filledEllipseRGBA(renderer, food_x, food_y, food_rx, food_ry, rand() % 255, rand() % 255, rand() % 255, 255);
         char* buffer = malloc(sizeof(char) * 50);
-	sprintf(buffer, "amnam's score: %d   elapsed time: %dms", snake_score, start_ticks - begining_of_time);
+		sprintf(buffer, "amnam's score: %d   elapsed time: %dms", snake_score, start_ticks - begining_of_time);
         /* printf("%s", buffer); */
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
     	SDL_RenderPresent(renderer);
