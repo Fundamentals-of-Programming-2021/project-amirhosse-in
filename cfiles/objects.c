@@ -44,7 +44,7 @@ City* find_camps(){
                 cities[(cities_count)-1].team = 0;
                 cities[(cities_count)-1].soldiers_to_move = 0;
                 cities[(cities_count)-1].growth_rate = 0;
-                cities[(cities_count)-1].dest_id = 0;
+                cities[(cities_count)-1].dest_id = -1;
             }
         }
     }
@@ -130,7 +130,7 @@ void set_soldier_speed(int x_src, int y_src, int x_dest, int y_dest, Soldier* so
 
 //check soldier is in destination and does necessary things
 void check_soldier_is_in_dest(Soldier* soldier){
-    if( abs (soldier->dest_x - soldier->dest_x) < minimum_length_for_collision &&  abs (soldier->dest_x - soldier->dest_x) < minimum_length_for_collision ){
+    if( abs (soldier->x - soldier->dest_x) < minimum_length_for_collision &&  abs (soldier->y - soldier->dest_y) < minimum_length_for_collision ){
         soldier->dest_x = -1;
         soldier->dest_y = -1;
         soldier->speed_x= 0;
@@ -178,3 +178,21 @@ void check_soldiers_collision(){
     }
 }
 
+void city_watcher(){
+    for(int i=0;i<cities_count;i++){
+        if(cities[i].dest_id != -1){
+            for(int j=0;j<soldiers_count;j++){
+                if( soldiers[j].city_id == cities[i].id && soldiers[j].dest_x == -1){
+                    int city_index = cities[i].dest_id;
+                    soldiers[j].city_id = cities[city_index].id;
+                    soldiers[j].dest_x = cities[city_index].x;
+                    soldiers[j].dest_y = cities[city_index].y;
+                    set_soldier_speed(cities[i].x, cities[i].y, cities[city_index].x, cities[city_index].y, soldiers+j);
+                    cities[i].soldiers_to_move -= 1;
+                    if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
+                    break;
+                }
+            }
+        }
+    }
+}

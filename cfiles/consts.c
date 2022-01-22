@@ -8,7 +8,7 @@ typedef struct Soldier{
     int dest_x;
     int dest_y;//equals -1 if be in destination
     int team;
-    int city_id;
+    int city_id;//equals to map[i][j]
 } Soldier;
 
 typedef struct City{
@@ -18,7 +18,7 @@ typedef struct City{
     int team;
     int soldier_counts;
     int soldiers_to_move;
-    int dest_id;
+    int dest_id;//equals to index of cities array
     int growth_rate;
 } City;
 
@@ -50,6 +50,7 @@ int primary_soldier_count = 40;
 int growth_rate_per_second = 3;
 int soldier_speed = 3;
 int minimum_length_for_collision = 5;
+int soldiers_size = 5;
 
 int current_mouse_x = 0;
 int current_mouse_y = 0;

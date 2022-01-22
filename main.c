@@ -70,7 +70,7 @@ int main() {
     SDL_Texture* cloud = SDL_CreateTextureFromSurface(renderer,surface);
     SDL_FreeSurface(surface);
     game_generator();
-
+    SDL_Rect rect = {.x = 10, .y=10, .h = 100, .w=100};
     //end of adding test picture
     int begining_of_time = SDL_GetTicks();
     while (1) {
@@ -83,8 +83,8 @@ int main() {
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
         stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
-       // SDL_RenderCopy(renderer,cloud,NULL,&cloud_rectangle);
-       // SDL_RenderCopy(renderer,coffee,NULL,&coffee_rectangle);
+        //SDL_RenderCopyEx(renderer, getImageTexture(renderer,"./files/coffee.bmp"), NULL,&rect, 45, NULL, SDL_FLIP_HORIZONTAL);
+         
         free(buffer);
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS);

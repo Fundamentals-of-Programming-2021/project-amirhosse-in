@@ -45,13 +45,13 @@ int color_picker(int id){
         case -100:out = 0xff;break;
         case 90:out = 0xff414C6D;break;
         case -90:out = 0xff23273E;break;
-        case 1:out=0xff3539E5;break;
+        case 1:out=0xff3539E5;break;//red
         case -1:out=0xff1C1CB7;break;
-        case 2:out=0xff9F3F30;break;
+        case 2:out=0xff9F3F30;break;//blue
         case -2:out=0xff7E231A;break;
-        case 3:out=0xff6B7900;break;
+        case 3:out=0xff6B7900;break;//green
         case -3:out=0xff404D00;break;
-        case 4:out=0xff7A6E54;break;
+        case 4:out=0xff7A6E54;break;//gray
         case -4:out=0xff383226;break;
         default: printf("we found a bug here\n");break;
     }
@@ -87,6 +87,28 @@ void draw_camps(SDL_Renderer* renderer){
         stringRGBA(renderer, x +2 , y + 3, buffer, 0,0,0,255);
     }
 }
+
+void draw_soldiers(SDL_Renderer* renderer){
+    SDL_Rect soldier_rectangle;
+    char* path = (char*) malloc(sizeof(char) * 30);
+    for(int i=0;i<soldiers_count;i++){
+        if(soldiers[i].dest_x != -1){
+            switch(soldiers[i].team){
+                case 1:sprintf(path, "./files/red.bmp");break;
+                case 2:sprintf(path, "./files/blue.bmp");break;
+                case 3:sprintf(path, "./files/green.bmp");break;
+                case 4:sprintf(path, "./files/gray.bmp");break;
+            }
+            soldier_rectangle.x = soldiers[i].x;
+            soldier_rectangle.y = soldiers[i].y;
+            soldier_rectangle.h = soldiers_size;
+            soldier_rectangle.w = soldiers_size;
+            SDL_RenderCopyEx(renderer, getImageTexture(renderer,path), NULL,&soldier_rectangle, 45, NULL, SDL_FLIP_HORIZONTAL);
+        }
+    }
+    free(path);
+}
+
 //this function draw a mouse curser and moving line
 void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed_y, int is_pressed){
     if(x>= map_start_x && x< map_start_x + map_width && y >= map_start_y && y < map_start_y + map_height){
