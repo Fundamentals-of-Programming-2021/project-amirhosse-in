@@ -74,7 +74,7 @@ int main() {
     //end of adding test picture
     int begining_of_time = SDL_GetTicks();
     while (1) {
-        int start_ticks = SDL_GetTicks();
+        start_ticks = SDL_GetTicks();
         if (handleEvents(renderer) == EXIT) break;
     	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     	SDL_RenderClear(renderer);

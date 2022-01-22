@@ -19,13 +19,14 @@ void game_generator(){
     srand(time(NULL));
     int city_count = rand()%5+40;
     soldiers = (Soldier*) malloc(sizeof(Soldier));
-    first_init_soldiers();
     //map_generator( &city_count);
     load_map("map1.map");
     remove_border_city();
     cities = find_camps();
     clean_map_from_non_camps_city();
     assign_camps_to_players();
+    first_init_soldiers();
+    printf("%d\n", cities[1].soldier_counts);
     save_map("map1.map");
     clock_t bbbb = clock();
     double time_s  = (double)(bbbb-aaaa)/CLOCKS_PER_SEC;
@@ -78,18 +79,25 @@ void draw_map(SDL_Renderer* renderer){
 }
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
+    SDL_Rect r;
+    r.h=25;
+    r.w=25;
+    char* path = (char*) malloc(sizeof(char) * 30);
     for(int i=0;i<cities_count;i++){
         int x = cities[i].x * map_cell_side + map_start_x;
         int y = cities[i].y * map_cell_side + map_start_y;
-        SDL_Rect r;
         r.x = x; 
         r.y = y;
-        r.w = 25;
-        r.h = 25;
-        SDL_SetRenderDrawColor(renderer, 0,255,0,255);
+         switch(soldiers[i].team){
+                case 0:sprintf(path, "./files/brown_camp.bmp");break;
+                case 1:sprintf(path, "./files/brown_camp.bmp");break;
+                case 2:sprintf(path, "./files/brown_camp.bmp");break;
+                case 3:sprintf(path, "./files/brown_camp.bmp");break;
+                case 4:sprintf(path, "./files/brown_camp.bmp");break;
+            }
         SDL_RenderFillRect(renderer, &r);
         char* buffer = (char*) malloc(sizeof(char) * 20);
-        sprintf(buffer, "%d", cities[i].id);
+        sprintf(buffer, "%d", cities[i].soldier_counts);
         stringRGBA(renderer, x +2 , y + 3, buffer, 0,0,0,255);
     }
 }
@@ -109,7 +117,9 @@ void draw_soldiers(SDL_Renderer* renderer){
             soldier_rectangle.y = soldiers[i].y;
             soldier_rectangle.h = soldiers_size;
             soldier_rectangle.w = soldiers_size;
-            SDL_RenderCopyEx(renderer, getImageTexture(renderer,path), NULL,&soldier_rectangle, 45, NULL, SDL_FLIP_HORIZONTAL);
+            SDL_Texture* temp_tuxture = getImageTexture(renderer,path);
+            SDL_RenderCopyEx(renderer, temp_tuxture, NULL,&soldier_rectangle, soldiers[i].angle, NULL, SDL_FLIP_HORIZONTAL);
+            SDL_DestroyTexture(temp_tuxture);
         }
     }
     free(path);
@@ -146,9 +156,7 @@ void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
         
         if(map[dest_y][dest_x] * map[base_y][base_x] == 0 || abs(map[dest_y][dest_x]) == abs(map[base_y][base_x])){
             //invalid attack
-            printf("it wasn't a valid attack\n");
         }else{
-            printf("you attacked from %d to %d\n", map[base_y][base_x],map[dest_y][dest_x]);
             attack(abs(map[base_y][base_x]), abs(map[dest_y][dest_x]));
         }
     }
@@ -162,10 +170,11 @@ void attack(int base_id, int dest_id){
     int base_index = id_to_city_index(base_id);
     int dest_index = id_to_city_index(dest_id);
     if(cities[base_index].team == 0){
-        printf("no way\n");
+       //invalid attack
     }else{
         cities[base_index].dest_id = dest_index;
         cities[base_index].soldiers_to_move = cities[base_index].soldier_counts;
+        printf("%d\n", cities[base_index].soldier_counts);
     }
 }
 

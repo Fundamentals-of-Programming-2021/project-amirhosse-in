@@ -1,14 +1,15 @@
 #include <stdio.h>
 #pragma once
 typedef struct Soldier{
-    int x;
-    int y;
+    double x;
+    double y;
     double speed_x;
     double speed_y;
-    int dest_x;
-    int dest_y;//equals -1 if be in destination
+    double dest_x;
+    double dest_y;//equals -1 if be in destination
     int team;
     int city_id;//equals to map[i][j]
+    double angle;
 } Soldier;
 
 typedef struct City{
@@ -20,6 +21,8 @@ typedef struct City{
     int soldiers_to_move;
     int dest_id;//equals to index of cities array
     int growth_rate;
+    int last_tick_for_attack;
+    int last_tick_for_growth;
 } City;
 
 typedef struct Game{
@@ -45,15 +48,23 @@ int players_count = 4;
 
 Soldier* soldiers;
 int soldiers_count = 0;
+int max_soldiers_count = 0;
 int primary_anti_soldier_count = 30;
-int primary_soldier_count = 40;
+int primary_soldier_count = 30;
 int growth_rate_per_second = 3;
-double soldier_speed = 0.003;
-int minimum_length_for_collision = 5;
-int soldiers_size = 5;
+double soldier_speed = 6;
+int minimum_length_for_collision = 8;
+int max_grow_soldier = 60;
+int soldiers_size = 30;
 
 int current_mouse_x = 0;
 int current_mouse_y = 0;
 int is_mouse_pressed = 0;
 int pressed_x = 0;
 int pressed_y = 0;
+
+int start_ticks;
+
+double abs_double(double a){
+    return a<0?-a:a;
+}
