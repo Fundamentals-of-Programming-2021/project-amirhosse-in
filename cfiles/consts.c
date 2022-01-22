@@ -48,7 +48,7 @@ int soldiers_count = 0;
 int primary_anti_soldier_count = 30;
 int primary_soldier_count = 40;
 int growth_rate_per_second = 3;
-int soldier_speed = 3;
+double soldier_speed = 0.003;
 int minimum_length_for_collision = 5;
 int soldiers_size = 5;
 

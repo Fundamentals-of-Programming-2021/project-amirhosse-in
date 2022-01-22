@@ -12,12 +12,14 @@
 //protypes
 void draw_camps(SDL_Renderer* renderer);
 void attack(int base_id, int dest_id);
+void draw_soldiers(SDL_Renderer* renderer);
 //this function initialize primary thing like generating map and etc.
 void game_generator(){
     clock_t aaaa = clock();
     srand(time(NULL));
     int city_count = rand()%5+40;
     soldiers = (Soldier*) malloc(sizeof(Soldier));
+    first_init_soldiers();
     //map_generator( &city_count);
     load_map("map1.map");
     remove_border_city();
@@ -69,6 +71,10 @@ void draw_map(SDL_Renderer* renderer){
         }
     }
     draw_camps(renderer);
+    draw_soldiers(renderer);
+    soldier_watcher();
+    city_watcher();
+
 }
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
@@ -158,7 +164,7 @@ void attack(int base_id, int dest_id){
     if(cities[base_index].team == 0){
         printf("no way\n");
     }else{
-        cities[base_index].dest_id = dest_id;
+        cities[base_index].dest_id = dest_index;
         cities[base_index].soldiers_to_move = cities[base_index].soldier_counts;
     }
 }

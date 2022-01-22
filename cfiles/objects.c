@@ -78,11 +78,13 @@ int team_number_to_city_index(int team){
     for(int i=0;i<cities_count;i++){
         if(cities[i].team == team) return i;
     }
+    return -1;
 }
 
 //this function generates [count] soldiers and add them to soldiers*
 void generate_soldier(int count, int team, int city_id){
     soldiers = (Soldier*) realloc(soldiers, sizeof(Soldier) * (count + soldiers_count) );
+    int city_index = id_to_city_index(city_id);
     for(int i=0;i < count;i++){
         soldiers[soldiers_count].team = cities[city_id].team;
         soldiers[soldiers_count].x = cities[city_id].x * map_cell_side + map_start_x;
@@ -92,7 +94,7 @@ void generate_soldier(int count, int team, int city_id){
         soldiers[soldiers_count].speed_y = 0;
         soldiers[soldiers_count].dest_y  = -1;
         soldiers[soldiers_count].dest_x  = -1;
-        cities[city_id].soldier_counts ++;
+        cities[city_index].soldier_counts ++;
         soldiers_count++;
     }
 }
@@ -107,11 +109,13 @@ void first_init_soldiers(){
 }
 
 //this function recives a Soldier* and it's destination and set's it's speed
-void set_soldier_speed(int x_src, int y_src, int x_dest, int y_dest, Soldier* soldier){
+void set_soldier_speed_and_dest(int x_src, int y_src, int x_dest, int y_dest, Soldier* soldier){
     x_src *= map_cell_side; x_src += map_start_x;
     y_src *= map_cell_side; y_src += map_start_y;
     x_dest *= map_cell_side; x_dest += map_start_x;
     y_dest *= map_cell_side; y_dest += map_start_y;
+    soldier->dest_x = x_dest;
+    soldier->dest_y = y_dest;
     double delta_x = x_dest - x_src;
     double delta_y = y_dest - y_src;
     if(delta_x == 0){
@@ -162,7 +166,8 @@ void check_soldiers_collision(){
             first_soldier = &soldiers[i];
             second_soldier = &soldiers[j];
             if(abs(first_soldier->x - second_soldier->x) < minimum_length_for_collision 
-            && abs(first_soldier->y - second_soldier->y) < minimum_length_for_collision){
+            && abs(first_soldier->y - second_soldier->y) < minimum_length_for_collision
+            && first_soldier->team != second_soldier->team){
                 for(int q = i; q<j; q++){
                     soldiers[q] = soldiers[q+1];
                 }
@@ -182,13 +187,14 @@ void city_watcher(){
     for(int i=0;i<cities_count;i++){
         if(cities[i].dest_id != -1){
             for(int j=0;j<soldiers_count;j++){
+                printf("%d = %d & dest_x = %d\n", soldiers[j].city_id, cities[i].id, soldiers[j].dest_x);
                 if( soldiers[j].city_id == cities[i].id && soldiers[j].dest_x == -1){
+                    printf("we send a soldier here\n");
                     int city_index = cities[i].dest_id;
                     soldiers[j].city_id = cities[city_index].id;
-                    soldiers[j].dest_x = cities[city_index].x;
-                    soldiers[j].dest_y = cities[city_index].y;
-                    set_soldier_speed(cities[i].x, cities[i].y, cities[city_index].x, cities[city_index].y, soldiers+j);
+                    set_soldier_speed_and_dest(cities[i].x, cities[i].y, cities[city_index].x, cities[city_index].y, soldiers+j);
                     cities[i].soldiers_to_move -= 1;
+                    cities[i].soldier_counts -= 1;
                     if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
                     break;
                 }
