@@ -14,8 +14,8 @@ double angle_calculator(double angle, int delta_x, int delta_y);
 int check_is_valid_camp(int row, int column){
     int base_color = map[row][column];
     int flag = 1;
-    for(int i=-10;i < 20;i++){
-        for(int j=-10; j< 20;j++){
+    for(int i=-5;i < 25;i++){
+        for(int j=-5; j< 25;j++){
             if(row+i < map_height/map_cell_side && column+j < map_width/map_cell_side
             && row+i >=0 && column+j >=0){
                 if(map[row+i][column+j] != base_color) flag =0;

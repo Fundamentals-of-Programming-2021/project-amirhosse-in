@@ -80,26 +80,30 @@ void draw_map(SDL_Renderer* renderer){
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
     SDL_Rect r;
-    r.h=25;
-    r.w=25;
+    r.h=40;
+    r.w=40;
     char* path = (char*) malloc(sizeof(char) * 30);
+    char* buffer = (char*) malloc(sizeof(char) * 20);
     for(int i=0;i<cities_count;i++){
         int x = cities[i].x * map_cell_side + map_start_x;
         int y = cities[i].y * map_cell_side + map_start_y;
         r.x = x; 
         r.y = y;
-         switch(soldiers[i].team){
+         switch(cities[i].team){
                 case 0:sprintf(path, "./files/brown_camp.bmp");break;
-                case 1:sprintf(path, "./files/brown_camp.bmp");break;
-                case 2:sprintf(path, "./files/brown_camp.bmp");break;
-                case 3:sprintf(path, "./files/brown_camp.bmp");break;
-                case 4:sprintf(path, "./files/brown_camp.bmp");break;
-            }
-        SDL_RenderFillRect(renderer, &r);
-        char* buffer = (char*) malloc(sizeof(char) * 20);
+                case 1:sprintf(path, "./files/red_camp.bmp");break;
+                case 2:sprintf(path, "./files/blue_camp.bmp");break;
+                case 3:sprintf(path, "./files/green_camp.bmp");break;
+                case 4:sprintf(path, "./files/gray_camp.bmp");break;
+        }
+        SDL_Texture* temp_tuxture = getImageTexture(renderer,path);
+        SDL_RenderCopyEx(renderer, temp_tuxture, NULL,&r, 0, NULL, SDL_FLIP_HORIZONTAL);
+        SDL_DestroyTexture(temp_tuxture);
         sprintf(buffer, "%d", cities[i].soldier_counts);
-        stringRGBA(renderer, x +2 , y + 3, buffer, 0,0,0,255);
+        stringRGBA(renderer, x +20, y + 3, buffer, 255,255,255,255);
     }
+    free(buffer);
+    free(path);
 }
 
 void draw_soldiers(SDL_Renderer* renderer){
