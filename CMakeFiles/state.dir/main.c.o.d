@@ -189,4 +189,9 @@ CMakeFiles/state.dir/main.c.o: \
   /opt/homebrew/include/SDL2/SDL_misc.h \
   /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/game.h \
-  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/game.c
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/game.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/io.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/consts.c \
+  /opt/homebrew/include/SDL2/SDL_mixer.h \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/map.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/objects.c

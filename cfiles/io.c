@@ -7,6 +7,11 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "consts.c"
 #include "map.c"
+#pragma once
+// prototype 
+void my_audio_callback(void *userdata, Uint8 *stream, int len);
+
+
 //this function resives a int and a file pointer, and put abs(int) in the file pointer
 void put_number_on_file_pointer(int a, FILE* fp){
     if(a<0) a*=-1;
@@ -84,3 +89,4 @@ SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path) {
     image = NULL;
     return texture;
 }
+

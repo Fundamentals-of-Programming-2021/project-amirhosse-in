@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "consts.c"
+#include "io.c"
+#include <SDL2/SDL_mixer.h>
 //prototypes
 void check_soldiers_collision();
 double angle_calculator(double angle, int delta_x, int delta_y);
@@ -27,7 +29,6 @@ int check_is_valid_camp(int row, int column){
 
 //this functions searches for big cities wich can have a camp
 City* find_camps(){
-
     City* cities;
     cities = (City*) malloc(sizeof(City));
     for(int i=0;i< map_height/map_cell_side;i++){
@@ -126,8 +127,12 @@ void set_soldier_speed_and_dest(int x_src, int y_src, int x_dest, int y_dest, So
     double delta_y = y_dest - y_src;
     if(delta_x == 0){
         soldier->speed_x =0;
-        soldier->speed_y = (delta_y>0?3:-3);
-        soldier->angle  = (delta_y>0?0:180);
+        soldier->speed_y = (delta_y>0?soldier_speed:-soldier_speed);
+        soldier->angle  = (delta_y>0?180:0);
+    }else if(delta_y == 0){
+        soldier->speed_x = delta_x > 0? soldier_speed:-soldier_speed;
+        soldier->speed_y = 0;
+        soldier->angle = delta_x>0?90:-90;
     }else{
         double abs_y = delta_y > 0 ? delta_y : -delta_y;
         double abs_x = delta_x > 0 ? delta_x : -delta_x;
@@ -145,6 +150,7 @@ int soldier_position(Soldier* soldier){
     for(int i=0;i<soldiers_count;i++){
         if(soldiers+i == soldier) return i;
     }
+    return -1;
 }
 
 //this function kills a soldier and sort soldiers*
@@ -180,13 +186,14 @@ void check_soldier_is_in_dest(Soldier* soldier){
                 cities[city_index].soldier_counts-=1;
                 kill_soldier(soldier);
                 for(int i=0;i<soldiers_count;i++){
-                    if(soldiers[i].team == cities[city_index].team){
+                    if(soldiers[i].team == cities[city_index].team && soldiers[i].city_id == cities[city_index].id){
                         kill_soldier(soldiers+i);
                         break;
                     }
                 }
             }else {
                 cities[city_index].team = soldier->team;
+				cities[city_index].soldiers_to_move = 0;
             }
         }
     }
@@ -217,29 +224,83 @@ void check_soldiers_collision(){
             second_soldier = &soldiers[j];
             if(abs_double(first_soldier->x - second_soldier->x) < minimum_length_for_collision 
             && abs_double(first_soldier->y - second_soldier->y) < minimum_length_for_collision
-            && first_soldier->team != second_soldier->team){
+            && first_soldier->team != second_soldier->team
+            && first_soldier->dest_x != -1 && second_soldier->dest_x != -1){
                 kill_soldier(first_soldier);
                 kill_soldier(second_soldier-1);
+                Mix_PlayChannel(-1, explosion_effect, 0);
             }
         }
     }
 }
 
+//this function apply attack for 1,2 or more soldier in parallel lines
+void send_soldier(int base_city_index, int dest_city_index){
+    //(X -  SIGN(DELTA_Y) * SIN(alpha) * L, Y + SIGN(DELTA_X) * COS(alpha) * L
+    int X_b = cities[base_city_index].x,
+        Y_b = cities[base_city_index].y,
+        X_d = cities[dest_city_index].x, 
+        Y_d = cities[dest_city_index].y;
+    double delta_x = cities[dest_city_index].x - cities[base_city_index].x;
+    double delta_y = cities[dest_city_index].y - cities[base_city_index].y;
+    double abs_delta_x = abs_double(delta_x);
+    double abs_delta_y = abs_double(delta_y);
+    double alpha = delta_x != 0 ? atan(abs_delta_y / abs_delta_x) : -1;
+    int to_move = cities[base_city_index].soldiers_to_move;
+    int flag = 0;
+    Soldier *first_soldier, *second_soldier, *third_soldier;
+    for(int i=0;i<soldiers_count;i++){
+        if( (soldiers+i)->city_id == cities[base_city_index].id && (soldiers+i)->dest_x == -1 ){
+            soldiers[i].city_id = cities[dest_city_index].id;
+            if(flag == 0) {
+                first_soldier = soldiers+i;
+                printf("f found\n");
+                flag++;
+            }
+            else if(flag == 1){
+                second_soldier = soldiers+i;
+                flag++;
+                printf("2 found\n");
+            }
+            else if(flag == 2){
+                third_soldier = soldiers+i;
+                printf("3 found\n");
+            }
+        }
+    }
+    double dx = sign(delta_y) * parallel_line_distance * sin(alpha);
+    double dy = sign(delta_x) * parallel_line_distance * cos(alpha);
+    if(to_move > 2){      
+       // set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
+       // set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
+       // set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, third_soldier);
+        cities[base_city_index].soldiers_to_move -= 1;
+        cities[base_city_index].soldier_counts -= 1;
+    }else if(to_move == 2){
+      //  set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
+       // set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
+       // set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, second_soldier); 
+        cities[base_city_index].soldiers_to_move -= 1;
+        cities[base_city_index].soldier_counts -= 1;
+    }else if(to_move ==1){
+       // set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
+        cities[base_city_index].soldiers_to_move -= 1;
+        cities[base_city_index].soldier_counts -= 1;
+    }
+}
+
+//this function sends soldiers for attacking and increase count of soldiers
 void city_watcher(){
     for(int i=0;i<cities_count;i++){
         if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
-            for(int j=0;j<soldiers_count;j++){
-                if( soldiers[j].city_id == cities[i].id && soldiers[j].dest_x == -1){
-                    int city_index = cities[i].dest_id;
-                    soldiers[j].city_id = cities[city_index].id;
-                    set_soldier_speed_and_dest(cities[i].x, cities[i].y, cities[city_index].x, cities[city_index].y, soldiers+j);
-                    cities[i].soldiers_to_move -= 1;
-                    cities[i].soldier_counts -= 1;
-                    cities[i].last_tick_for_attack = start_ticks;
-                    if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
-                    break;
-                }
-            }
+			if(cities[i].soldier_counts == 0){
+				cities[i].soldiers_to_move = 0;	
+			}else{
+                send_soldier(i, cities[i].dest_id);
+                cities[i].last_tick_for_attack = start_ticks;
+                if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
+                break;
+		    }
         }
         if(cities[i].soldier_counts < max_grow_soldier
         && start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate

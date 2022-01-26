@@ -4,6 +4,7 @@
         "sdl2_gfxprimitives.h": "c",
         "game.h": "c",
         "time.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "sdl_mixer.h": "c"
     }
 }

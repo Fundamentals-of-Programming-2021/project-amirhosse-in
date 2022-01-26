@@ -33,6 +33,9 @@ int handleEvents(SDL_Renderer* renderer) {
             return EXIT;
         if (event.type == SDL_KEYDOWN){
             const Uint8* keys = SDL_GetKeyboardState(NULL);
+            if(keys[SDL_SCANCODE_RIGHT]){
+                 //Mix_PlayChannel(-1, jumpEffect, 0);
+            }
         }
         if( event.type == SDL_MOUSEMOTION){
                 //event.motion.x and event.motion.y 
@@ -59,18 +62,12 @@ int handleEvents(SDL_Renderer* renderer) {
 
 int main() {
 
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //adding test picture
-    SDL_Surface* surface = SDL_LoadBMP("./files/coffee.bmp");
-    SDL_SetColorKey(surface,SDL_TRUE,SDL_MapRGB(surface->format,0xFF,0,0xFF));
-    SDL_Texture* coffee = SDL_CreateTextureFromSurface(renderer,surface);
-    surface = SDL_LoadBMP("./files/2.bmp");
-    SDL_Texture* cloud = SDL_CreateTextureFromSurface(renderer,surface);
-    SDL_FreeSurface(surface);
     game_generator();
-    SDL_Rect rect = {.x = 10, .y=10, .h = 100, .w=100};
     //end of adding test picture
     int begining_of_time = SDL_GetTicks();
     while (1) {
@@ -89,8 +86,8 @@ int main() {
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS);
     }
-    SDL_DestroyTexture(cloud);
-    SDL_DestroyTexture(coffee);
+    Mix_FreeChunk(explosion_effect);
+    Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();

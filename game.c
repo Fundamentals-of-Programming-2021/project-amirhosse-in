@@ -1,4 +1,4 @@
-#include "game.h"
+    #include "game.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -15,6 +15,9 @@ void attack(int base_id, int dest_id);
 void draw_soldiers(SDL_Renderer* renderer);
 //this function initialize primary thing like generating map and etc.
 void game_generator(){
+    //loading files
+    explosion_effect = Mix_LoadWAV("./files/explosion.wav");
+    //end of loading files
     clock_t aaaa = clock();
     srand(time(NULL));
     int city_count = rand()%5+40;

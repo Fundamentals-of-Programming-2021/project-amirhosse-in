@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <SDL2/SDL_mixer.h>
 #pragma once
 typedef struct Soldier{
     double x;
@@ -53,9 +54,11 @@ int primary_anti_soldier_count = 30;
 int primary_soldier_count = 30;
 int growth_rate_per_second = 1;
 double soldier_speed = 6;
-int minimum_length_for_collision = 8;
+int minimum_length_for_collision = 12;
 int max_grow_soldier = 60;
 int soldiers_size = 30;
+int parallel_line_distance = 5; 
+
 
 int current_mouse_x = 0;
 int current_mouse_y = 0;
@@ -68,3 +71,12 @@ int start_ticks;
 double abs_double(double a){
     return a<0?-a:a;
 }
+int sign(double a){
+    if(a==0) return 0;
+    if(a< 0) return -1;
+    if(a>0) return 1;
+    return -2;
+}
+
+//audio files
+Mix_Chunk *explosion_effect;

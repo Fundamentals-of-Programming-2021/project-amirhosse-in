@@ -192,8 +192,17 @@ CMakeFiles/state.dir/main.c.o: main.c \
   /opt/homebrew/include/SDL2/SDL_misc.h \
   /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h \
   game.h \
-  game.c
+  game.c \
+  cfiles/io.c \
+  cfiles/consts.c \
+  /opt/homebrew/include/SDL2/SDL_mixer.h \
+  cfiles/map.c \
+  cfiles/objects.c
 
+
+/opt/homebrew/include/SDL2/SDL_mixer.h:
+
+cfiles/consts.c:
 
 game.c:
 
@@ -236,6 +245,8 @@ game.h:
 /opt/homebrew/include/SDL2/SDL_endian.h:
 
 /opt/homebrew/include/SDL2/SDL_atomic.h:
+
+cfiles/map.c:
 
 /opt/homebrew/include/SDL2/SDL_assert.h:
 
@@ -308,6 +319,8 @@ game.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_pthread/_pthread_mutexattr_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_nlink_t.h:
+
+cfiles/io.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_ino64_t.h:
 
@@ -468,6 +481,8 @@ game.h:
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include/stddef.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_int64_t.h:
+
+cfiles/objects.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_useconds_t.h:
 
