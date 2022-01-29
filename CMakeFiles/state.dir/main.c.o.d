@@ -194,4 +194,5 @@ CMakeFiles/state.dir/main.c.o: \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/consts.c \
   /opt/homebrew/include/SDL2/SDL_mixer.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/map.c \
-  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/objects.c
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/objects.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/explosion.h

@@ -7,6 +7,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "consts.c"
 #include "io.c"
+#include "explosion.h"
 #include <SDL2/SDL_mixer.h>
 //prototypes
 void check_soldiers_collision();
@@ -89,7 +90,7 @@ void generate_soldier(int count, int team, int city_id){
         soldiers = (Soldier*) realloc(soldiers, sizeof(Soldier) * ( (count + soldiers_count) ) );    
         max_soldiers_count +=  (count + soldiers_count) - max_soldiers_count;
     }
-    soldiers = (Soldier*) realloc(soldiers, sizeof(Soldier) * (count + soldiers_count) );
+    //soldiers = (Soldier*) realloc(soldiers, sizeof(Soldier) * (count + soldiers_count) );
     int city_index = id_to_city_index(city_id);
     for(int i=0;i < count;i++){
         soldiers[soldiers_count].team = cities[city_index].team;
@@ -121,6 +122,8 @@ void set_soldier_speed_and_dest(int x_src, int y_src, int x_dest, int y_dest, So
     y_src *= map_cell_side; y_src += map_start_y;
     x_dest *= map_cell_side; x_dest += map_start_x;
     y_dest *= map_cell_side; y_dest += map_start_y;
+    soldier->x = x_src;
+    soldier->y = y_src;
     soldier->dest_x = x_dest;
     soldier->dest_y = y_dest;
     double delta_x = x_dest - x_src;
@@ -143,6 +146,7 @@ void set_soldier_speed_and_dest(int x_src, int y_src, int x_dest, int y_dest, So
         soldier->speed_x *= (delta_x > 0? 1 : -1);
         soldier->angle = angle_calculator(angle, delta_x, delta_y);
     }
+    //printf("%lf %lf\n", soldier->speed_x, soldier->speed_y);
 }
 
 //this function returns position of a soldier in soldiers*
@@ -226,6 +230,7 @@ void check_soldiers_collision(){
             && abs_double(first_soldier->y - second_soldier->y) < minimum_length_for_collision
             && first_soldier->team != second_soldier->team
             && first_soldier->dest_x != -1 && second_soldier->dest_x != -1){
+                create_explosion(first_soldier->x, first_soldier->y);
                 kill_soldier(first_soldier);
                 kill_soldier(second_soldier-1);
                 Mix_PlayChannel(-1, explosion_effect, 0);
@@ -245,8 +250,8 @@ void send_soldier(int base_city_index, int dest_city_index){
     double delta_y = cities[dest_city_index].y - cities[base_city_index].y;
     double abs_delta_x = abs_double(delta_x);
     double abs_delta_y = abs_double(delta_y);
-    double alpha = delta_x != 0 ? atan(abs_delta_y / abs_delta_x) : -1;
-    int to_move = cities[base_city_index].soldiers_to_move;
+    double alpha = delta_x != 0 ? atan(abs_delta_y / abs_delta_x) : 1.68;
+    int to_move = cities[base_city_index].soldiers_to_move > 2 ? 3 : cities[base_city_index].soldiers_to_move;
     int flag = 0;
     Soldier *first_soldier, *second_soldier, *third_soldier;
     for(int i=0;i<soldiers_count;i++){
@@ -254,36 +259,35 @@ void send_soldier(int base_city_index, int dest_city_index){
             soldiers[i].city_id = cities[dest_city_index].id;
             if(flag == 0) {
                 first_soldier = soldiers+i;
-                printf("f found\n");
                 flag++;
+                if(to_move == 1)break;
             }
             else if(flag == 1){
                 second_soldier = soldiers+i;
                 flag++;
-                printf("2 found\n");
+                if(to_move == 2)break;
             }
             else if(flag == 2){
                 third_soldier = soldiers+i;
-                printf("3 found\n");
+                if(to_move == 3)break;
             }
         }
     }
     double dx = sign(delta_y) * parallel_line_distance * sin(alpha);
     double dy = sign(delta_x) * parallel_line_distance * cos(alpha);
-    if(to_move > 2){      
-       // set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
-       // set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
-       // set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, third_soldier);
-        cities[base_city_index].soldiers_to_move -= 1;
-        cities[base_city_index].soldier_counts -= 1;
+    if(to_move > 2){     
+        set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
+        set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , second_soldier);
+        set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, third_soldier);
+        cities[base_city_index].soldiers_to_move -= 3;
+        cities[base_city_index].soldier_counts -= 3;
     }else if(to_move == 2){
-      //  set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
-       // set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
-       // set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, second_soldier); 
-        cities[base_city_index].soldiers_to_move -= 1;
-        cities[base_city_index].soldier_counts -= 1;
+        set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, second_soldier);
+        set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, first_soldier); 
+        cities[base_city_index].soldiers_to_move -= 2;
+        cities[base_city_index].soldier_counts -= 2;
     }else if(to_move ==1){
-       // set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
+        set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
         cities[base_city_index].soldiers_to_move -= 1;
         cities[base_city_index].soldier_counts -= 1;
     }
@@ -293,9 +297,11 @@ void send_soldier(int base_city_index, int dest_city_index){
 void city_watcher(){
     for(int i=0;i<cities_count;i++){
         if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
-			if(cities[i].soldier_counts == 0){
-				cities[i].soldiers_to_move = 0;	
-			}else{
+			if(cities[i].soldier_counts < cities[i].soldiers_to_move){
+                cities[i].soldiers_to_move = cities[i].soldier_counts;
+                if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
+			}
+            if(cities[i].soldiers_to_move > 0){
                 send_soldier(i, cities[i].dest_id);
                 cities[i].last_tick_for_attack = start_ticks;
                 if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;

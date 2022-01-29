@@ -26,10 +26,13 @@ typedef struct City{
     int last_tick_for_growth;
 } City;
 
-typedef struct Game{
-    int players_count;
-    
-} Game;
+typedef struct Explosion{
+    int x;
+    int y;
+    int state;
+    int last_tick;
+} Explosion;
+
 
 
 #define map_width 700
@@ -46,6 +49,7 @@ int cities_count = 0;
 int cities_available[50];
 
 int players_count = 4;
+int player_id = 1;
 
 Soldier* soldiers;
 int soldiers_count = 0;
@@ -57,7 +61,7 @@ double soldier_speed = 6;
 int minimum_length_for_collision = 12;
 int max_grow_soldier = 60;
 int soldiers_size = 30;
-int parallel_line_distance = 5; 
+int parallel_line_distance = 7; 
 
 
 int current_mouse_x = 0;
@@ -67,6 +71,12 @@ int pressed_x = 0;
 int pressed_y = 0;
 
 int start_ticks;
+
+double explosion_time = 1;
+Explosion* explosions;
+int explosions_count = 0;
+int max_explosions_count = 0;
+int explosion_size = 20;
 
 double abs_double(double a){
     return a<0?-a:a;

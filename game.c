@@ -9,6 +9,7 @@
 #include "./cfiles/io.c"
 #include "./cfiles/objects.c"
 #include "./cfiles/map.c"
+#include "./cfiles/explosion.h"
 //protypes
 void draw_camps(SDL_Renderer* renderer);
 void attack(int base_id, int dest_id);
@@ -22,6 +23,7 @@ void game_generator(){
     srand(time(NULL));
     int city_count = rand()%5+40;
     soldiers = (Soldier*) malloc(sizeof(Soldier));
+    //explosions = (Explosion*) malloc(sizeof(Soldier));
     //map_generator( &city_count);
     load_map("map1.map");
     remove_border_city();
@@ -78,7 +80,7 @@ void draw_map(SDL_Renderer* renderer){
     draw_soldiers(renderer);
     soldier_watcher();
     city_watcher();
-
+    draw_explosions(renderer);
 }
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
