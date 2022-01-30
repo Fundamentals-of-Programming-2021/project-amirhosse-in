@@ -6,9 +6,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "consts.c"
+#pragma once
 
-
-
+void attack(int base_id, int dest_id);
 //scoring: this function checks that a city is under attack or no
 int is_city_under_attack(int city_index){
     for(int i=0;i<soldiers_count;i++){
@@ -35,15 +35,19 @@ int distance_calculator(int* base_cities_index,int city_count, int dest_city_ind
 }
 
 //scoring: this function returns cities[city_index].soldiers_count
-int soldier_counter(int city_index){
-    return cities[city_index].soldier_counts;
+int soldier_counter(int* city_indexes, int city_count){
+    int out =0 ;
+    for(int i=0;i<city_count;i++){
+        out+= cities[city_indexes[i]].soldier_counts;
+    }
+    return out;
 }
 
 //this function counts cities that belongs to [team]
 int team_city_counter(int team){
     int out = 0;
     for(int i=0;i<cities_count;i++){
-        if(cities[i].team == team) out++;
+        if(cities[i].team == team && cities[i].dest_id == -1) out++;
     }
     return out;
 }
@@ -53,7 +57,7 @@ int* team_city_finder(int city_count, int team){
     int* out = (int*) malloc(sizeof(int) * city_count);
     int iterator = 0;
     for(int i = 0;i < cities_count; i++){
-        if(cities[i].team == team){
+        if(cities[i].team == team && cities[i].dest_id == -1){
             out[iterator] = i;
             iterator++;
         }
@@ -82,7 +86,7 @@ int delta_soldiers(int* base_cities_index, int city_count, int dest_index){
 int extract_city_from_bitmask(int* out, int bitmask, int* city_indexes, int city_count){
     int count = 0;
     for(int i=0;i < city_count; i++){
-        if ((1LL << i) | bitmask){
+        if ((1LL << i) & bitmask){
             out[count] = city_indexes[i];
             count++;
         }
@@ -92,16 +96,82 @@ int extract_city_from_bitmask(int* out, int bitmask, int* city_indexes, int city
 
 // this function scores a attack
 long long scoring(int* city_indexes, int city_count, int destination_index){
-    int* city= = (int*) malloc(sizeof(int) * 50);
-    for(int i = 1;i <= players_count; i++){
-        if( i != player_id ){
-            int city_count = team_city_counter(i);
-            int* team_city = team_city_finder(city_count, i);
+    int sigma_distance = distance_calculator(city_indexes, city_count, destination_index);
+    int is_attacking = is_city_attacking(destination_index);
+    int dest_soldiers = cities[destination_index].soldier_counts;
+    int our_cities_count = city_count;
+    int delta_soldier = delta_soldiers(city_indexes, city_count, destination_index);
+
+    return (-1 * sigma_distance) + (50 * is_attacking) + (-1 * dest_soldiers) + (-10 * our_cities_count) + (-20 * delta_soldier);
+}
+
+//this functions copy first on second
+void copy_int_array(int* first_array, int* second_array, int n){
+    for(int i=0;i<n;i++){
+        second_array[i] = first_array[i];
+    }
+}
+
+void ai(){
+    int* city = (int*) malloc(sizeof(int) * 50);
+    int* final_cities = (int*) malloc(sizeof(int) * 50);
+    int final_cities_count = 0;
+    int final_dest = -1;
+    for(int team_i = 1;team_i <= players_count; team_i++){
+        if( team_i != player_id && start_ticks > ai_tick[team_i] * 1000){
+            //finding all cities that belongs to the team
+            int city_count = team_city_counter(team_i);
+            int* team_city = team_city_finder(city_count, team_i);
+
             int bitmask = 1LL<<city_count;
+            
+            //valid attack?
+            int flag_to_attack = 0;
+            long long int max_score = 0;
+            long long int score = 0;
+
+            //all possible attacks
             for(int i=0;i < bitmask;i++){
-                int count_of_city = extract_city_from_bitmask(city, bitmask, team_city, city_count);
-                
+                int count_of_city = extract_city_from_bitmask(city, i, team_city, city_count);
+                int soldiers_count_on_cities = soldier_counter(city, count_of_city);
+                for(int j=0; j < cities_count; j++){
+                    if(cities[j].team != team_i && cities[j].soldier_counts + 5< soldiers_count_on_cities){
+                        score = scoring(city, count_of_city, j);
+                        if(final_dest == -1){
+                            max_score = score;
+                            final_dest = j;
+                            final_cities_count = count_of_city;
+                            copy_int_array(city, final_cities, final_cities_count);
+                        }else if(score > max_score){
+                            max_score = score;
+                            final_dest = j;
+                            final_cities_count = count_of_city;
+                            copy_int_array(city, final_cities, final_cities_count);
+                        }
+                    }                      
+                }
             }
+            if(final_dest != -1){
+                for(int i=0;i<final_cities_count;i++){
+                    attack(cities[final_cities[i]].id, cities[final_dest].id);
+                }
+                ai_tick[team_i] += rand()%5;
+            }
+            final_dest = -1;
         }
     }
 }
+
+//this function applies a attack
+void attack(int base_id, int dest_id){
+    int base_index = id_to_city_index(base_id);
+    int dest_index = id_to_city_index(dest_id);
+    if(cities[base_index].team == 0){
+       //invalid attack
+    }else{
+        cities[base_index].dest_id = dest_index;
+        cities[base_index].soldiers_to_move = cities[base_index].soldier_counts;
+        printf("%d\n", cities[base_index].soldier_counts);
+    }
+}
+

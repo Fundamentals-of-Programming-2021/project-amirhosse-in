@@ -66,15 +66,6 @@ void assign_camps_to_players(){
         }else x++;
     }
 }
-//this function recives non zero abs(map[i][j]) and return index of city 
-int id_to_city_index(int map_number){
-    for(int i=0;i <cities_count;i++){
-        if(cities[i].id == map_number ){
-            return i;
-        }
-    }
-    return -1;
-}
 
 //this function return city index from city team
 int team_number_to_city_index(int team){
@@ -190,12 +181,13 @@ void check_soldier_is_in_dest(Soldier* soldier){
                 cities[city_index].soldier_counts-=1;
                 kill_soldier(soldier);
                 for(int i=0;i<soldiers_count;i++){
-                    if(soldiers[i].team == cities[city_index].team && soldiers[i].city_id == cities[city_index].id){
+                    if(soldiers[i].team == cities[city_index].team && soldiers[i].city_id == cities[city_index].id && soldiers[i].dest_x == -1){
                         kill_soldier(soldiers+i);
                         break;
                     }
                 }
             }else {
+                cities[city_index].soldier_counts = 1;
                 cities[city_index].team = soldier->team;
 				cities[city_index].soldiers_to_move = 0;
             }
@@ -296,7 +288,7 @@ void send_soldier(int base_city_index, int dest_city_index){
 //this function sends soldiers for attacking and increase count of soldiers
 void city_watcher(){
     for(int i=0;i<cities_count;i++){
-        if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
+        if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 700){
 			if(cities[i].soldier_counts < cities[i].soldiers_to_move){
                 cities[i].soldiers_to_move = cities[i].soldier_counts;
                 if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;

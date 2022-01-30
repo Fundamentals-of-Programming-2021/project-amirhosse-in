@@ -35,7 +35,7 @@ typedef struct Explosion{
 
 
 
-#define map_width 700
+#define map_width 700   
 #define map_height 700
 #define map_cell_side 2
 #define map_start_x 10
@@ -87,6 +87,19 @@ int sign(double a){
     if(a>0) return 1;
     return -2;
 }
+
+int ai_tick[5];
+
+//this function recives non zero abs(map[i][j]) and return index of city 
+int id_to_city_index(int map_number){
+    for(int i=0;i <cities_count;i++){
+        if(cities[i].id == map_number ){
+            return i;
+        }
+    }
+    return -1;
+}
+
 
 //audio files
 Mix_Chunk *explosion_effect;

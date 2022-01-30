@@ -6,9 +6,49 @@
 
 #IncludeRegexTransform: 
 
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
+time.h
+-
+stdio.h
+-
+stdbool.h
+-
+stdlib.h
+-
+math.h
+-
+SDL2/SDL.h
+-
+SDL2/SDL2_gfxPrimitives.h
+-
+consts.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
+
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
 stdio.h
 -
+SDL2/SDL_mixer.h
+-
+
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
+time.h
+-
+stdio.h
+-
+stdbool.h
+-
+stdlib.h
+-
+math.h
+-
+SDL2/SDL.h
+-
+SDL2/SDL2_gfxPrimitives.h
+-
+consts.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
+io.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
 time.h
@@ -65,6 +105,12 @@ SDL2/SDL2_gfxPrimitives.h
 -
 consts.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/consts.c
+io.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+explosion.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
+SDL2/SDL_mixer.h
+-
 
 /home/amirhossein/Documents/project-amirhosse-in/game.c
 game.h
@@ -89,6 +135,10 @@ SDL2/SDL2_gfxPrimitives.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/objects.c
 ./cfiles/map.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
+./cfiles/explosion.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
+./cfiles/ai.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
 
 /home/amirhossein/Documents/project-amirhosse-in/game.h
 stdio.h

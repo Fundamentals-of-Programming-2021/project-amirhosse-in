@@ -1,4 +1,4 @@
-    #include "game.h"
+#include "game.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -10,6 +10,7 @@
 #include "./cfiles/objects.c"
 #include "./cfiles/map.c"
 #include "./cfiles/explosion.h"
+#include "./cfiles/ai.h"
 //protypes
 void draw_camps(SDL_Renderer* renderer);
 void attack(int base_id, int dest_id);
@@ -23,9 +24,10 @@ void game_generator(){
     srand(time(NULL));
     int city_count = rand()%5+40;
     soldiers = (Soldier*) malloc(sizeof(Soldier));
+    for(int i=0;i<5;i++)ai_tick[i]=rand()%5;
     //explosions = (Explosion*) malloc(sizeof(Soldier));
-    //map_generator( &city_count);
-    load_map("map1.map");
+    map_generator( &city_count);
+    //load_map("map1.map");
     remove_border_city();
     cities = find_camps();
     clean_map_from_non_camps_city();
@@ -81,6 +83,7 @@ void draw_map(SDL_Renderer* renderer){
     soldier_watcher();
     city_watcher();
     draw_explosions(renderer);
+    ai();
 }
 //this function will be called by draw_map() and draws camps
 void draw_camps(SDL_Renderer* renderer){
@@ -171,19 +174,6 @@ void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
     }
     else {
         //invalid attack
-    }
-}
-
-//this function applies a attack
-void attack(int base_id, int dest_id){
-    int base_index = id_to_city_index(base_id);
-    int dest_index = id_to_city_index(dest_id);
-    if(cities[base_index].team == 0){
-       //invalid attack
-    }else{
-        cities[base_index].dest_id = dest_index;
-        cities[base_index].soldiers_to_move = cities[base_index].soldier_counts;
-        printf("%d\n", cities[base_index].soldier_counts);
     }
 }
 
