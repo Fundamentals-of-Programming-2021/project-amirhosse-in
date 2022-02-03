@@ -1,3 +1,5 @@
+#ifndef AI_H
+#define AI_H
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -5,10 +7,22 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "consts.c"
-#pragma once
-
+#include "global.c"
+#include "camps.c"
+//prototypes
+int is_city_under_attack(int city_index);
+int is_city_attacking(int city_index);
+int distance_calculator(int* base_cities_index,int city_count, int dest_city_index);
+int soldier_counter(int* city_indexes, int city_count);
 void attack(int base_id, int dest_id);
+int team_city_counter(int team);
+int* team_city_finder(int city_count, int team);
+int delta_soldiers(int* base_cities_index, int city_count, int dest_index);
+int extract_city_from_bitmask(int* out, int bitmask, int* city_indexes, int city_count);
+long long scoring(int* city_indexes, int city_count, int destination_index);
+void ai();
+void attack(int base_id, int dest_id);
+
 //scoring: this function checks that a city is under attack or no
 int is_city_under_attack(int city_index){
     for(int i=0;i<soldiers_count;i++){
@@ -21,7 +35,7 @@ int is_city_under_attack(int city_index){
 
 //scoring: this function checks that a city is attacking or no
 int is_city_attacking(int city_index){
-    return cities[city_index].dest_id != -1 ? 1 : 0;
+    return cities[city_index].dest_counts != 0 ? 1 : 0;
 }
 
 //scoring: this function return manhattan distance of two city
@@ -47,7 +61,7 @@ int soldier_counter(int* city_indexes, int city_count){
 int team_city_counter(int team){
     int out = 0;
     for(int i=0;i<cities_count;i++){
-        if(cities[i].team == team && cities[i].dest_id == -1) out++;
+        if(cities[i].team == team && cities[i].dest_counts == 0) out++;
     }
     return out;
 }
@@ -57,7 +71,7 @@ int* team_city_finder(int city_count, int team){
     int* out = (int*) malloc(sizeof(int) * city_count);
     int iterator = 0;
     for(int i = 0;i < cities_count; i++){
-        if(cities[i].team == team && cities[i].dest_id == -1){
+        if(cities[i].team == team && cities[i].dest_counts == 0){
             out[iterator] = i;
             iterator++;
         }
@@ -105,12 +119,6 @@ long long scoring(int* city_indexes, int city_count, int destination_index){
     return (-1 * sigma_distance) + (50 * is_attacking) + (-1 * dest_soldiers) + (-10 * our_cities_count) + (-20 * delta_soldier);
 }
 
-//this functions copy first on second
-void copy_int_array(int* first_array, int* second_array, int n){
-    for(int i=0;i<n;i++){
-        second_array[i] = first_array[i];
-    }
-}
 
 void ai(){
     int* city = (int*) malloc(sizeof(int) * 50);
@@ -118,7 +126,7 @@ void ai(){
     int final_cities_count = 0;
     int final_dest = -1;
     for(int team_i = 1;team_i <= players_count; team_i++){
-        if( team_i != player_id && start_ticks > ai_tick[team_i] * 1000){
+        if( team_i != player_id && start_ticks > ai_tick[team_i] * 3000){
             //finding all cities that belongs to the team
             int city_count = team_city_counter(team_i);
             int* team_city = team_city_finder(city_count, team_i);
@@ -135,7 +143,7 @@ void ai(){
                 int count_of_city = extract_city_from_bitmask(city, i, team_city, city_count);
                 int soldiers_count_on_cities = soldier_counter(city, count_of_city);
                 for(int j=0; j < cities_count; j++){
-                    if(cities[j].team != team_i && cities[j].soldier_counts + 5< soldiers_count_on_cities){
+                    if(cities[j].team != team_i && is_city_under_attack(j) == 0 &&cities[j].soldier_counts + 5< soldiers_count_on_cities){
                         score = scoring(city, count_of_city, j);
                         if(final_dest == -1){
                             max_score = score;
@@ -169,9 +177,20 @@ void attack(int base_id, int dest_id){
     if(cities[base_index].team == 0){
        //invalid attack
     }else{
-        cities[base_index].dest_id = dest_index;
-        cities[base_index].soldiers_to_move = cities[base_index].soldier_counts;
-        printf("%d\n", cities[base_index].soldier_counts);
+        cities[base_index].dest_counts++;
+        if(cities[base_index].max_dest_counts < cities[base_index].dest_counts + 1){
+            cities[base_index].dest_id = (int*) realloc(cities[base_index].dest_id, sizeof(int) * (cities[base_index].dest_counts + 1));
+            cities[base_index].soldiers_to_move = (int*) realloc(cities[base_index].soldiers_to_move, sizeof(int) * (cities[base_index].dest_counts + 1));
+            cities[base_index].max_dest_counts = cities[base_index].dest_counts;
+        }
+        int soldiers_to_move_count = 0;
+        for(int i=0;i < cities[base_index].dest_counts -1; i++){
+            soldiers_to_move_count += cities[base_index].soldiers_to_move[i];
+        }
+        int iterator = cities[base_index].dest_counts-1;
+        cities[base_index].dest_id[iterator] = dest_index;
+        cities[base_index].soldiers_to_move[iterator] = cities[base_index].soldier_counts - soldiers_to_move_count;
     }
 }
 
+#endif

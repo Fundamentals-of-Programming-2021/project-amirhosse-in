@@ -1,3 +1,5 @@
+#ifndef IO_C
+#define IO_C
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -5,12 +7,15 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "consts.c"
+#include "global.c"
 #include "map.c"
-#pragma once
 // prototype 
+SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path);
 void my_audio_callback(void *userdata, Uint8 *stream, int len);
-
+void load_map(char* path);
+void put_number_on_file_pointer(int a, FILE* fp);
+void save_map( char* path);
+void init_textures(SDL_Renderer* renderer);
 
 //this function resives a int and a file pointer, and put abs(int) in the file pointer
 void put_number_on_file_pointer(int a, FILE* fp){
@@ -90,3 +95,18 @@ SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path) {
     return texture;
 }
 
+void init_textures(SDL_Renderer* renderer){
+    //planes
+    blue_plane = getImageTexture(renderer,"./files/planes/blue.bmp");
+    green_plane = getImageTexture(renderer,"./files/planes/green.bmp");
+    red_plane = getImageTexture(renderer,"./files/planes/red.bmp");
+    gray_plane = getImageTexture(renderer,"./files/planes/gray.bmp");
+    //camps
+    brown_camp = getImageTexture(renderer,"./files/camps/brown.bmp");
+    blue_camp = getImageTexture(renderer,"./files/camps/blue.bmp");
+    green_camp = getImageTexture(renderer,"./files/camps/green.bmp");
+    gray_camp = getImageTexture(renderer,"./files/camps/gray.bmp");
+    red_camp = getImageTexture(renderer,"./files/camps/red.bmp");
+}
+
+#endif

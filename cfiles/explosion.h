@@ -1,3 +1,6 @@
+#ifndef EXPLOSION_H
+#define EXPLOSION_H
+
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -5,9 +8,16 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "consts.c"
+#include "global.c"
 #include "io.c"
-#pragma once
+
+//prototypes
+void create_explosion(int x, int y);
+void destory_explosions();
+void explosions_watcher();
+void draw_explosions(SDL_Renderer* renderer);
+SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path);
+
 
 //this function creates a explosion on x,y
 void create_explosion(int x, int y){
@@ -54,8 +64,10 @@ void draw_explosions(SDL_Renderer* renderer){
         path[19] = explosions[i].state+'0';
         r.x = explosions[i].x;
         r.y = explosions[i].y;
-        SDL_Texture* temp_tuxture = getImageTexture(renderer,path);
-        SDL_RenderCopyEx(renderer, temp_tuxture, NULL,&r, 0, NULL, SDL_FLIP_HORIZONTAL);
-        SDL_DestroyTexture(temp_tuxture);
+        SDL_Texture* temp_texture = getImageTexture(renderer,path);
+        SDL_RenderCopyEx(renderer, temp_texture, NULL,&r, 0, NULL, SDL_FLIP_HORIZONTAL);
+        SDL_DestroyTexture(temp_texture);
     } 
 }
+
+#endif

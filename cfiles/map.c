@@ -1,3 +1,6 @@
+#ifndef MAP_C
+#define MAP_C
+
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -5,10 +8,12 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "consts.c"
+#include "global.c"
+#include "soldiers.c"
+#include "camps.c"
 #pragma once
 int city_border[4000][2] ;
-
+void draw_explosions(SDL_Renderer* renderer);
 //prototype
 int find_big_area( int n);
 void dfs_for_calculate_area(int row, int column,int flag[][map_width/map_cell_side], int number, int* count);
@@ -16,6 +21,12 @@ void map_generator( int* city_count);
 int fill_city( int row, int column,int city_id);
 int city_border_finder(int row, int column, int city_id);
 void specify_border();
+void draw_map(SDL_Renderer* renderer);
+int color_picker(int id);
+void remove_border_city();
+void clean_map_from_non_camps_city();
+void specify_border();
+void dfs_border(int row, int column, int map_flag[][map_width/map_cell_side], int* border_count, int city_id);
 
 //this function specifies a city's border to make it bigger by coloring a new cell
 void dfs_border(int row, int column, int map_flag[][map_width/map_cell_side], int* border_count, int city_id){
@@ -123,10 +134,11 @@ void dfs_for_calculate_area(int row, int column,int flag[][map_width/map_cell_si
 //find a big area from border city to fill a new city
 int find_big_area( int n){
     int out =0;
-    for(out ; out < n; out++){
+    for(int i ; i < n; i++){
+        out = i;
         int flag[map_height/map_cell_side][map_width/map_cell_side] = {0};
         int count = 0;
-        dfs_for_calculate_area( city_border[out][0], city_border[out][1], flag, 0, &count);
+        dfs_for_calculate_area( city_border[i][0], city_border[i][1], flag, 0, &count);
         if(count>=100) break;
     }
     if(n == -1) return 0;
@@ -186,3 +198,45 @@ void remove_border_city(){
         remove_city_with_id(map[map_height/map_cell_side-1][i]);
     }
 }
+
+//this function is used for drawing map and border (negative numbers specifies borders) & this function uses id_to_city_index() to determine owner of city
+int color_picker(int id){
+    int out = 0;
+    int x;
+    if(id==0){ x = -100;}
+    else{ 
+        x = id_to_city_index(abs(id));
+        if(cities[x].team != 0) x = cities[x].team * (id < 0? -1 : 1);
+        else x = 90 * (id < 0? -1 : 1);
+    }
+    switch (x)
+    {
+        case -100:out = 0xff;break;
+        case 90:out = 0xff414C6D;break;
+        case -90:out = 0xff23273E;break;
+        case 1:out=0xff3539E5;break;//red
+        case -1:out=0xff1C1CB7;break;
+        case 2:out=0xff9F3F30;break;//blue
+        case -2:out=0xff7E231A;break;
+        case 3:out=0xff6B7900;break;//green
+        case -3:out=0xff404D00;break;
+        case 4:out=0xff7A6E54;break;//gray
+        case -4:out=0xff383226;break;
+        default: printf("we found a bug here\n");break;
+    }
+    return out;
+}
+
+//this function draws map on renderer
+void draw_map(SDL_Renderer* renderer){
+    int x,y;
+    for(int i=0;i<map_height/map_cell_side;i++){
+        for(int j=0;j<map_width/map_cell_side;j++){
+            x = j*map_cell_side + map_start_x;
+            y = i*map_cell_side + map_start_y; 
+            boxColor(renderer, x, y, x+map_cell_side, y+map_cell_side,color_picker(map[i][j]));
+        }
+    }
+}
+
+#endif

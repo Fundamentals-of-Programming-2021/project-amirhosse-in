@@ -194,20 +194,24 @@ CMakeFiles/state.dir/main.c.o: main.c \
   game.h \
   game.c \
   cfiles/io.c \
-  cfiles/consts.c \
+  cfiles/global.c \
   /opt/homebrew/include/SDL2/SDL_mixer.h \
   cfiles/map.c \
-  cfiles/objects.c \
-  cfiles/explosion.h
+  cfiles/soldiers.c \
+  cfiles/explosion.h \
+  cfiles/ai.h \
+  cfiles/camps.c
 
 
 cfiles/explosion.h:
 
+/opt/homebrew/include/SDL2/begin_code.h:
+
+cfiles/soldiers.c:
+
 /opt/homebrew/include/SDL2/SDL_mixer.h:
 
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include/stdbool.h:
-
-cfiles/consts.c:
+cfiles/global.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/wait.h:
 
@@ -275,8 +279,6 @@ cfiles/io.c:
 
 cfiles/map.c:
 
-cfiles/objects.c:
-
 /opt/homebrew/include/SDL2/SDL_assert.h:
 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include/float.h:
@@ -302,6 +304,8 @@ cfiles/objects.c:
 /opt/homebrew/include/SDL2/SDL_touch.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/time.h:
+
+cfiles/camps.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_size_t.h:
 
@@ -380,6 +384,8 @@ cfiles/objects.c:
 /opt/homebrew/include/SDL2/close_code.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_fd_zero.h:
+
+cfiles/ai.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types.h:
 
@@ -517,6 +523,8 @@ cfiles/objects.c:
 
 /opt/homebrew/include/SDL2/SDL_shape.h:
 
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include/stdbool.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/secure/_string.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_u_short.h:
@@ -576,8 +584,6 @@ cfiles/objects.c:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/secure/_strings.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_null.h:
-
-/opt/homebrew/include/SDL2/begin_code.h:
 
 /opt/homebrew/include/SDL2/SDL_pixels.h:
 

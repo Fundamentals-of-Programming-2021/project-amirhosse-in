@@ -10,7 +10,6 @@
 const int FPS = 30 ;
 const int window_height = 800;
 const int window_width = 1000;
-
 /*
  getting keys
  void moveCircle(const Uint8* keys, double* snake_x, double* snake_y) {
@@ -67,7 +66,7 @@ int main() {
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     //adding test picture
-    game_generator();
+    game_generator(renderer);
     //end of adding test picture
     int begining_of_time = SDL_GetTicks();
     while (1) {
@@ -75,7 +74,15 @@ int main() {
         if (handleEvents(renderer) == EXIT) break;
     	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     	SDL_RenderClear(renderer);
+
         draw_map(renderer);
+        draw_camps(renderer);
+        draw_soldiers(renderer);
+        soldier_watcher();
+        city_watcher();
+        draw_explosions(renderer);
+        //ai();
+        
         mouse_hover(renderer, current_mouse_x,current_mouse_y,pressed_x, pressed_y, is_mouse_pressed);
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
@@ -84,7 +91,7 @@ int main() {
          
         free(buffer);
     	SDL_RenderPresent(renderer);
-        SDL_Delay ( 1000 / FPS);
+        SDL_Delay ( 1000 / FPS );
     }
     Mix_FreeChunk(explosion_effect);
     Mix_CloseAudio();

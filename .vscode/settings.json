@@ -5,6 +5,10 @@
         "game.h": "c",
         "time.h": "c",
         "stdio.h": "c",
-        "sdl_mixer.h": "c"
+        "sdl_mixer.h": "c",
+        "stdlib.h": "c",
+        "explosion.h": "c",
+        "camps.c": "cpp",
+        "sdl.h": "c"
     }
 }
