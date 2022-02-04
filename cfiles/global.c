@@ -44,9 +44,12 @@ typedef struct Button{
     int y;
     int h;
     int w;
-    char* path;
-    char* hover_path;
+    char* caption;
 } Button;
+
+const int window_height = 800;
+const int window_width = 1000;
+int window_state = 1;//1: menu, 2: game
 
 //map
 #define map_width 700   
@@ -126,5 +129,10 @@ void copy_int_array(int* first_array, int* second_array, int n){
 
 //audio files
 Mix_Chunk *explosion_effect;
+
+//menu
+SDL_Texture *bg_menu;
+SDL_Texture *bg_game;
+SDL_Texture *btn_main;
 
 #endif

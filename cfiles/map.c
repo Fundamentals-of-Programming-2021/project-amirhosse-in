@@ -25,7 +25,6 @@ void draw_map(SDL_Renderer* renderer);
 int color_picker(int id);
 void remove_border_city();
 void clean_map_from_non_camps_city();
-void specify_border();
 void dfs_border(int row, int column, int map_flag[][map_width/map_cell_side], int* border_count, int city_id);
 
 //this function specifies a city's border to make it bigger by coloring a new cell
@@ -229,6 +228,8 @@ int color_picker(int id){
 
 //this function draws map on renderer
 void draw_map(SDL_Renderer* renderer){
+    SDL_Rect bg_rect = {.x = 0, .y = 0, .h = window_height , .w = window_width};
+    SDL_RenderCopyEx(renderer, bg_game, NULL, &bg_rect, 180,  NULL, SDL_FLIP_HORIZONTAL);
     int x,y;
     for(int i=0;i<map_height/map_cell_side;i++){
         for(int j=0;j<map_width/map_cell_side;j++){

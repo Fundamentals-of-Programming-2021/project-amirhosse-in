@@ -7,6 +7,7 @@ CMakeFiles/state.dir/main.c.o: cfiles/explosion.h
 CMakeFiles/state.dir/main.c.o: cfiles/global.c
 CMakeFiles/state.dir/main.c.o: cfiles/io.c
 CMakeFiles/state.dir/main.c.o: cfiles/map.c
+CMakeFiles/state.dir/main.c.o: cfiles/menu.c
 CMakeFiles/state.dir/main.c.o: cfiles/soldiers.c
 CMakeFiles/state.dir/main.c.o: game.c
 CMakeFiles/state.dir/main.c.o: game.h

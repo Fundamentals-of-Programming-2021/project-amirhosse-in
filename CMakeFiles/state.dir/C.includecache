@@ -97,6 +97,8 @@ global.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
 map.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
+SDL2/SDL_ttf.h
+-
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
 time.h
@@ -119,6 +121,22 @@ soldiers.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
 camps.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.c
+stdio.h
+-
+SDL2/SDL_mixer.h
+-
+SDL2/SDL.h
+-
+SDL2/SDL2_gfxPrimitives.h
+-
+global.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
+io.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+SDL2/SDL_ttf.h
+-
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
 time.h
@@ -197,4 +215,6 @@ game.h
 /home/amirhossein/Documents/project-amirhosse-in/game.h
 game.c
 /home/amirhossein/Documents/project-amirhosse-in/game.c
+./cfiles/menu.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.c
 

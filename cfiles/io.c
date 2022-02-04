@@ -9,6 +9,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "global.c"
 #include "map.c"
+#include <SDL2/SDL_ttf.h>
 // prototype 
 SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path);
 void my_audio_callback(void *userdata, Uint8 *stream, int len);
@@ -94,6 +95,18 @@ SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path) {
     image = NULL;
     return texture;
 }
+SDL_Texture *getTextTexture(SDL_Renderer *sdlRenderer, char* font_path, char* caption, SDL_Color color){
+    TTF_Font *font = TTF_OpenFont(font_path, 32);
+    if(!font){
+        printf("Failed to load font at %s: %s\n", font_path, SDL_GetError());
+        return 0;
+    }
+    SDL_Surface *surfaceText = TTF_RenderText_Solid(font, caption,color);
+    SDL_Texture *textureText = SDL_CreateTextureFromSurface(sdlRenderer, surfaceText);
+    SDL_FreeSurface(surfaceText);
+    font = NULL;
+    return textureText;
+}
 
 void init_textures(SDL_Renderer* renderer){
     //planes
@@ -107,6 +120,10 @@ void init_textures(SDL_Renderer* renderer){
     green_camp = getImageTexture(renderer,"./files/camps/green.bmp");
     gray_camp = getImageTexture(renderer,"./files/camps/gray.bmp");
     red_camp = getImageTexture(renderer,"./files/camps/red.bmp");
+    //menu
+    bg_game = getImageTexture(renderer, "./files/bgs/game.bmp");
+    bg_menu = getImageTexture(renderer, "./files/bgs/menu.bmp");
+    btn_main = getImageTexture(renderer, "./files/buttons/1.bmp");
 }
 
 #endif

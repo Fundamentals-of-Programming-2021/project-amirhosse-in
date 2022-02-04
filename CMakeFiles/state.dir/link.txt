@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/state.dir/main.c.o -o state   -L/opt/homebrew/lib  -Wl,-rpath,/opt/homebrew/lib -lm -lSDL2 -lSDL2_gfx -lSDL2_mixer 
+/usr/bin/cc CMakeFiles/state.dir/main.c.o -o state   -L/opt/homebrew/lib  -Wl,-rpath,/opt/homebrew/lib -lm -lSDL2 -lSDL2_gfx -lSDL2_mixer -lSDL2_ttf 
