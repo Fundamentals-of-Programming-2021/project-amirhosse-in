@@ -68,7 +68,7 @@ int cities_available[50];
     SDL_Texture* gray_camp;
 //Player and ai
 int players_count = 4;
-int player_id = -1;
+int player_id = 1;
 int ai_tick[5]; // for ai's attack
 
 //Soldiers

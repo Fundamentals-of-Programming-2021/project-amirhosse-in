@@ -79,11 +79,9 @@ int main() {
         draw_camps(renderer);
         draw_soldiers(renderer);
         soldier_watcher();
-        printf("BABA MAGE INJA\n");fflush(stdout);
         city_watcher();
-        printf("BUG NADARE?\n"); fflush(stdout);
-        //draw_explosions(renderer);
-        //ai();
+        draw_explosions(renderer);
+        ai();
         mouse_hover(renderer, current_mouse_x,current_mouse_y,pressed_x, pressed_y, is_mouse_pressed);
         char* buffer = malloc(sizeof(char) * 50);
         sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);

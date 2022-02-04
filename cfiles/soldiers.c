@@ -142,7 +142,7 @@ void check_soldier_is_in_dest(Soldier* soldier){
             }else {
                 cities[city_index].soldier_counts = 1;
                 cities[city_index].team = soldier->team;
-				cities[city_index].soldiers_to_move = 0;
+				cities[city_index].dest_counts = 0;
             }
         }
     }
