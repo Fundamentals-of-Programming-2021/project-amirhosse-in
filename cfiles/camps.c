@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CAMPS_C
+#define CAMPS_C
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -99,10 +100,11 @@ int id_to_city_index(int map_number){
 
 //this function sends soldiers for attacking and increase count of soldiers
 void city_watcher(){
+    printf("yani inja?\n");fflush(stdout);
     for(int i=0;i<cities_count;i++){
         /*if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
 			if(cities[i].soldier_counts < cities[i].soldiers_to_move){
-                cities[i].soldiers_to_move = cities[i].soldier_counts;
+                cities[i].soldiers_to_move = cities[i].soldier_counts;  
                 if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
 			}
             if(cities[i].soldiers_to_move > 0){
@@ -112,6 +114,27 @@ void city_watcher(){
                 break;
 		    }
         }*/
+        printf("1\n");fflush(stdout);
+        int total_soldier_to_move = 0;
+        for(int j=0;j<cities[i].dest_counts;j++){
+            printf("%d of %d\n", j , cities[i].dest_counts);
+            total_soldier_to_move += cities[i].soldiers_to_move[j];
+        }
+        printf("2\n");fflush(stdout);
+        if( total_soldier_to_move > cities[i].soldier_counts){
+            total_soldier_to_move -= cities[i].soldier_counts;
+            for(int j=cities[i].dest_counts-1; j>=0; j--){
+                if(total_soldier_to_move >= cities[i].soldiers_to_move[j]){
+                    total_soldier_to_move -= cities[i].soldiers_to_move[j];
+                    cities[i].soldiers_to_move[j] = 0;
+                    cities[i].dest_counts--;
+                }else{
+                    cities[i].soldiers_to_move[j] -= total_soldier_to_move;
+                    total_soldier_to_move = 0;
+                }
+            }
+        }
+        printf("3\n");fflush(stdout);
         if(cities[i].dest_counts > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
             cities[i].last_tick_for_attack = start_ticks;
             for(int j=0;j<cities[i].dest_counts;j++){
@@ -127,6 +150,7 @@ void city_watcher(){
                 }
             }
         }
+        printf("4\n");fflush(stdout);
         if(cities[i].soldier_counts < max_grow_soldier
         && start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate
         && cities[i].team != 0){
@@ -134,6 +158,7 @@ void city_watcher(){
             cities[i].last_tick_for_growth = start_ticks;
         }
     }
+    printf("bug dare?\n");fflush(stdout);
 }
 
 //this function will be called by draw_map() and draws camps
@@ -160,3 +185,4 @@ void draw_camps(SDL_Renderer* renderer){
     free(buffer);
 }
 
+#endif

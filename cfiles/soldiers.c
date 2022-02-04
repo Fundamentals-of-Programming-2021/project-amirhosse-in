@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SOLDIER_C
+#define SOLDIER_C
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -270,3 +271,4 @@ void draw_soldiers(SDL_Renderer* renderer){
     free(path);
 }
 
+#endif

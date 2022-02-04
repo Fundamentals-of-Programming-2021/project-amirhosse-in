@@ -11,7 +11,7 @@
 #include <SDL2/SDL_mixer.h>
 #include "global.c" 
 
-int check_is_valid_camp(int row, int column);
+//int check_is_valid_camp(int row, int column);
 City* find_camps();
 void assign_camps_to_players();
 int team_number_to_city_index(int team);
