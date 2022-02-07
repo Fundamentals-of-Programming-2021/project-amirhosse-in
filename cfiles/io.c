@@ -81,6 +81,58 @@ void load_map(char* path){
     specify_border();
 }
 
+void load_map_count(char* path){
+    FILE* f = fopen(path, "r");
+    fscanf(f, "%d", &maps_count);
+    fclose(f);
+}
+void save_map_count(char* path){
+    FILE* f = fopen(path, "w+");
+    fprintf(f, "%d", maps_count);
+    fclose(f);
+}
+
+void save_map_camps(char* path){
+    FILE* f = fopen(path, "w+");
+    fprintf(f, "%d\n", players_count);
+    for(int i=0;i<cities_count;i++){
+        if(cities[i].team!=0) fprintf(f, "%d\n%d\n", i,cities[i].team);
+    }
+    fclose(f);
+}
+void load_map_camps(char* path){
+    FILE* f = fopen(path, "r");
+    int pc ;
+    fscanf(f, "%d", &pc);
+    for(int i=0;i<2*pc;i++){
+        int index, team;
+        fscanf(f, "%d%d", &index, &team);
+        cities[index].team = team;
+    }
+    fclose(f);
+}
+void save_user_names(){
+    FILE* f = fopen("usernames.usr", "w+");
+    for(int i=0;i < user_counts;i++){
+        fprintf(f,"%s\n",user_names[i]);
+    }
+    fclose(f);
+}
+void load_user_names(){
+    FILE* f = fopen("usernames.usr", "r");
+    user_names = (char**) malloc(sizeof(char*));
+    *user_names = (char*) malloc(sizeof(char) * 50);
+    char c;
+    char* s = malloc(200);
+    while(fgets(s, 50, f)){
+        s[strcspn(s,"\n")]=0;
+        strcpy(user_names[user_counts],s);
+        user_counts++;
+        user_names = realloc(user_names, sizeof(char*) * (user_counts+1));
+        user_names[user_counts] = malloc(sizeof(char) * 50);
+    }
+    fclose(f);
+}
 SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path) {
     SDL_Surface *image = SDL_LoadBMP(image_path);
     /* Let the user know if the file failed to load */

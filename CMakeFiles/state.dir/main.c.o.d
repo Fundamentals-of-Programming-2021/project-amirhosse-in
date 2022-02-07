@@ -197,4 +197,8 @@ CMakeFiles/state.dir/main.c.o: \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/soldiers.c \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/explosion.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/ai.h \
-  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/camps.c
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/camps.c \
+  /opt/homebrew/include/SDL2/SDL_ttf.h \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/menu.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/map_menu.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/getuser.c

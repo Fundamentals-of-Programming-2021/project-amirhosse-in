@@ -175,7 +175,7 @@ void attack(int base_id, int dest_id){
     int base_index = id_to_city_index(base_id);
     int dest_index = id_to_city_index(dest_id);
     if(cities[base_index].team == 0){
-       //invalid attack
+       add_new_message("You just can choose your color!", red,0);
     }else{
         cities[base_index].dest_counts++;
         if(cities[base_index].max_dest_counts < cities[base_index].dest_counts + 1){

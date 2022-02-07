@@ -200,8 +200,14 @@ CMakeFiles/state.dir/main.c.o: main.c \
   cfiles/soldiers.c \
   cfiles/explosion.h \
   cfiles/ai.h \
-  cfiles/camps.c
+  cfiles/camps.c \
+  /opt/homebrew/include/SDL2/SDL_ttf.h \
+  cfiles/menu.c \
+  cfiles/map_menu.c \
+  cfiles/getuser.c
 
+
+cfiles/map_menu.c:
 
 cfiles/explosion.h:
 
@@ -325,6 +331,8 @@ cfiles/camps.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_pthread/_pthread_t.h:
 
+/opt/homebrew/include/SDL2/SDL_ttf.h:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_pthread/_pthread_rwlockattr_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_pthread/_pthread_mutex_t.h:
@@ -429,6 +437,8 @@ cfiles/ai.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_clock_t.h:
 
+cfiles/menu.c:
+
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_dev_t.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/arm/arch.h:
@@ -458,6 +468,8 @@ cfiles/ai.h:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/libkern/arm/OSByteOrder.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/libkern/_OSByteOrder.h:
+
+cfiles/getuser.c:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_endian.h:
 

@@ -20,6 +20,8 @@
 void attack(int base_id, int dest_id);
 //this function initialize primary thing like generating map and etc.
 void game_generator(SDL_Renderer* renderer){
+    load_user_names();
+    save_user_names();
     init_textures(renderer);
     //loading files
     explosion_effect = Mix_LoadWAV("./files/explosion.wav");
@@ -32,7 +34,7 @@ void game_generator(SDL_Renderer* renderer){
         ai_tick[i]=rand()%5;
         printf("we rand %d\n", ai_tick[i]);
     }
-    //explosions = (Explosion*) malloc(sizeof(Soldier));
+    explosions = (Explosion*) malloc(sizeof(Soldier));
     //map_generator( &city_count);
     load_map("map1.map");
     remove_border_city();
@@ -41,6 +43,7 @@ void game_generator(SDL_Renderer* renderer){
     assign_camps_to_players();
     first_init_soldiers();
     save_map("map1.map");
+    save_map_camps("camps1.cmp");
     clock_t bbbb = clock();
     double time_s  = (double)(bbbb-aaaa)/CLOCKS_PER_SEC;
     printf("we could generete %d cities in %lf seconds\n", cities_count, time_s);
@@ -77,7 +80,7 @@ void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
         dest_y -= map_start_y; dest_y /= map_cell_side;
         
         if(map[dest_y][dest_x] * map[base_y][base_x] == 0 || abs(map[dest_y][dest_x]) == abs(map[base_y][base_x])){
-            //invalid attack
+            add_new_message("Invalid attack!", red,0);
         }else{
             attack(abs(map[base_y][base_x]), abs(map[dest_y][dest_x]));
         }
@@ -86,5 +89,7 @@ void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
         //invalid attack
     }
 }
+
+
 
 #endif

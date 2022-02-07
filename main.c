@@ -7,9 +7,8 @@
 #include "game.h"
 #include "game.c"
 #include "./cfiles/menu.c"
-//echo we are testing this git repo
-const int FPS = 30 ;
-const int EXIT = 12345;
+#include "./cfiles/getuser.c"
+#include "./cfiles/map_menu.c"
 int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -20,11 +19,20 @@ int handleEvents(SDL_Renderer* renderer) {
             if(keys[SDL_SCANCODE_RIGHT]){
                  //Mix_PlayChannel(-1, jumpEffect, 0);
             }
+           if(window_state == 3 && keys[SDL_SCANCODE_BACKSPACE]){
+                user_name[strlen(user_name)-1]='\0';
+                create_new_username_texture(renderer,user_name);
+            }
+        }
+        if(window_state == 3 && event.type == SDL_TEXTINPUT){
+            strcat(user_name,event.text.text);
+            create_new_username_texture(renderer,user_name);
+           // printf("user_name : %s\n", user_name);
         }
         if( event.type == SDL_MOUSEMOTION){
-                //event.motion.x and event.motion.y 
-                current_mouse_x = event.motion.x;
-                current_mouse_y = event.motion.y;
+            //event.motion.x and event.motion.y 
+            current_mouse_x = event.motion.x;
+            current_mouse_y = event.motion.y;
         }
         if(event.type == SDL_MOUSEBUTTONDOWN){
             if(event.button.button == SDL_BUTTON_LEFT){
@@ -39,7 +47,11 @@ int handleEvents(SDL_Renderer* renderer) {
                 if(window_state == 2){
                     detect_attack(pressed_x, pressed_y, event.button.x, event.button.y);
                 }else if(window_state == 1){
-                    detect_click(event.button.x, event.button.y);
+                    detect_click(renderer, event.button.x, event.button.y);
+                }else if(window_state == 3){
+                    detect_click_get_user(renderer, event.button.x, event.button.y);
+                }else if(window_state == 4){
+                    detect_click_map_menu(renderer, event.button.x, event.button.y,0);
                 }
             }
         }
@@ -54,9 +66,10 @@ int main() {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
+    messages = (Message*) malloc(sizeof(Message));
     game_generator(renderer);
-    init_buttons();
+    init_buttons(renderer);
+    init_primary_textures_getuser(renderer);
     int begining_of_time = SDL_GetTicks();
     while (1) {
         start_ticks = SDL_GetTicks();
@@ -66,6 +79,8 @@ int main() {
         if(window_state == 1){
             draw_buttons(renderer);
         }else if(window_state == 2){
+            SDL_Rect bg_rect = {.x =0, .y=0, .h= window_height, .w =window_width};
+            SDL_RenderCopyEx(renderer, bg_game, NULL, &bg_rect, 180,  NULL, SDL_FLIP_HORIZONTAL);
             draw_map(renderer);
             draw_camps(renderer);
             draw_soldiers(renderer);
@@ -74,11 +89,12 @@ int main() {
             draw_explosions(renderer);
             ai();
             mouse_hover(renderer, current_mouse_x,current_mouse_y,pressed_x, pressed_y, is_mouse_pressed);
-            char* buffer = malloc(sizeof(char) * 50);
-            sprintf(buffer, "amnam's score: %d   elapsed time: %dms", start_ticks,start_ticks - begining_of_time);
-            stringRGBA(renderer, 5, 5, buffer, 0, 0, 0, 255);
-            free(buffer);   
+        }else if(window_state == 3){
+            draw_get_user_name(renderer);
+        }else if(window_state == 4){
+            draw_map_menu(renderer);
         }
+        messages_watcher(renderer);
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS );
     }

@@ -47,10 +47,19 @@ typedef struct Button{
     char* caption;
 } Button;
 
+typedef struct Message{
+    char* text;
+    int start_time;
+    SDL_Color color;
+    int need_to_be_freed;
+} Message;
 const int window_height = 800;
 const int window_width = 1000;
-int window_state = 1;//1: menu, 2: game
-
+int window_state = 1;//1: menu, 2: game, 3: get username, 4: maps
+const int FPS = 60 ;
+const int EXIT = 12345;
+char* user_name;
+int user_id = -1;
 //map
 #define map_width 700   
 #define map_height 700
@@ -58,6 +67,13 @@ int window_state = 1;//1: menu, 2: game
 #define map_start_x 10
 #define map_start_y 10
 int map[map_height/map_cell_side][map_width/map_cell_side] = {0};
+int maps_count = 0;
+//color
+SDL_Color red = {255,0,0};
+SDL_Color green = {0,255,0};
+SDL_Color blue = {0,0,255};
+SDL_Color black = {0,0,0};
+SDL_Color white = {255,255,255};
 
 //City
 City* cities;
@@ -135,4 +151,39 @@ SDL_Texture *bg_menu;
 SDL_Texture *bg_game;
 SDL_Texture *btn_main;
 
+
+//ranking
+int user_counts = 0;
+char** user_names;
+int logined = 0;
+//messages;
+int messages_count = 0;
+int max_messages_count =0 ;
+Message* messages;
+void add_new_message(char* message, SDL_Color color, int flag){
+    messages_count++;
+    if(max_messages_count < 1 + messages_count){
+        messages = realloc(messages, sizeof(Message) * (messages_count+1));
+        max_messages_count = messages_count;
+    }
+    messages[messages_count-1].text = message;
+    messages[messages_count-1].color = color;
+    messages[messages_count-1].start_time = start_ticks;
+    messages[messages_count-1].need_to_be_freed = flag;
+}
+void messages_watcher(SDL_Renderer* renderer){
+    for(int i=0;i<messages_count;i++){
+        stringRGBA(renderer, 5,5 + 10*i, messages[i].text, messages[i].color.r,  messages[i].color.g, messages[i].color.b,255);
+    }
+    for(int i=0;i<messages_count;i++){
+        if(start_ticks - messages[i].start_time > 2000){
+            if(messages[i].need_to_be_freed) free(messages[i].text);
+            for(int j=i;j<messages_count-1;j++){
+                messages[j] = messages[j+1];
+            }
+            messages_count--;
+            i--;
+        }
+    }
+}
 #endif
