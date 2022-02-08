@@ -156,11 +156,12 @@ SDL_Texture *getTextTexture(SDL_Renderer *sdlRenderer, char* font_path, char* ca
     SDL_Surface *surfaceText = TTF_RenderText_Solid(font, caption,color);
     SDL_Texture *textureText = SDL_CreateTextureFromSurface(sdlRenderer, surfaceText);
     SDL_FreeSurface(surfaceText);
-    font = NULL;
+    TTF_CloseFont(font);
     return textureText;
 }
 
 void init_textures(SDL_Renderer* renderer){
+    user_name = (char*) malloc(sizeof(char) * 50);
     //planes
     blue_plane = getImageTexture(renderer,"./files/planes/blue.bmp");
     green_plane = getImageTexture(renderer,"./files/planes/green.bmp");
@@ -176,6 +177,17 @@ void init_textures(SDL_Renderer* renderer){
     bg_game = getImageTexture(renderer, "./files/bgs/game.bmp");
     bg_menu = getImageTexture(renderer, "./files/bgs/menu.bmp");
     btn_main = getImageTexture(renderer, "./files/buttons/1.bmp");
+    //potions
+    for(int i=0;i<6;i++){
+        char path[50];
+        sprintf(path, "./files/potions/%d.bmp", i+1);
+        potions_texture[i] = getImageTexture(renderer, path);
+    }
+    //winning caption
+    winning_caption[0] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Red Won",black);
+    winning_caption[1] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Blue Won",black);
+    winning_caption[2] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Green Won",black);
+    winning_caption[3] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Gray Won",black);
 }
 
 #endif

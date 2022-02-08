@@ -55,7 +55,7 @@ typedef struct Message{
 } Message;
 const int window_height = 800;
 const int window_width = 1000;
-int window_state = 1;//1: menu, 2: game, 3: get username, 4: maps
+int window_state = 3;//1: menu, 2: game, 3: get username, 4: maps
 const int FPS = 60 ;
 const int EXIT = 12345;
 char* user_name;
@@ -74,8 +74,12 @@ SDL_Color green = {0,255,0};
 SDL_Color blue = {0,0,255};
 SDL_Color black = {0,0,0};
 SDL_Color white = {255,255,255};
-
+SDL_Color my_red = {229,57,53};
+SDL_Color my_blue = {48,63, 159};
+SDL_Color my_green = {0, 121, 107};
+SDL_Color my_gray = {84,110,122};
 //City
+int teams_standing[5];
 City* cities;
 int cities_count = 0;
 int cities_available[50];
@@ -89,6 +93,7 @@ int cities_available[50];
 int players_count = 4;
 int player_id = 1;
 int ai_tick[5]; // for ai's attack
+SDL_Texture* winning_caption[4];
 
 //Soldiers
 Soldier* soldiers;
@@ -186,4 +191,15 @@ void messages_watcher(SDL_Renderer* renderer){
         }
     }
 }
+
+//Potion
+SDL_Texture* potions_texture[6];
+int potion_state[5];
+int potion_impact_time = 6000;
+//1: out soldiers speed * 2
+//2: fix enemy's soldiers
+//3: enemy's soldiers's speed / 2
+//4: no limit to create soldier
+//5: enemy can't attack 
+//6: increase growth rate
 #endif

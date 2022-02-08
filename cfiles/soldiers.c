@@ -150,13 +150,39 @@ void check_soldier_is_in_dest(Soldier* soldier){
 
 //this function moves all soldiers (if their speed != 0) and checks they are in destination and checks conflicts
 void soldier_watcher(){
-    Soldier* soldier_ptr;
+    int fix_flag =0;
+    int turtle_flag =0;
+    for(int i=0;i<5;i++) {
+        if(potion_state[i] == 2) fix_flag++;
+        if(potion_state[i] == 3) turtle_flag++;
+    }
     for(int i=0; i<soldiers_count ;i++){
-        soldier_ptr = &soldiers[i];
-        if (soldier_ptr -> speed_x != 0 || soldier_ptr -> speed_y != 0){
-            soldier_ptr->x += soldier_ptr->speed_x;
-            soldier_ptr->y += soldier_ptr->speed_y;
-            check_soldier_is_in_dest(soldier_ptr);
+        if (soldiers[i].speed_x != 0 || soldiers[i].speed_y != 0){
+            if(potion_state[soldiers[i].team] == 1){//potion 1
+                soldiers[i].x += 2*soldiers[i].speed_x;
+                soldiers[i].y += 2*soldiers[i].speed_y;
+            }else if(fix_flag != 0){
+                if((fix_flag == 1 && potion_state[soldiers[i].team] != 2) || (fix_flag > 1)){
+                    //fixed soldier
+                }else{
+                    soldiers[i].x += soldiers[i].speed_x;
+                    soldiers[i].y += soldiers[i].speed_y;
+                }
+            }else if(turtle_flag != 0){
+                if((turtle_flag == 1 && potion_state[soldiers[i].team] != 3) || (turtle_flag > 1)){
+                    //turtle soldier
+                    soldiers[i].x += 0.5*soldiers[i].speed_x;
+                    soldiers[i].y += 0.5*soldiers[i].speed_y;
+                }else{
+                    soldiers[i].x += soldiers[i].speed_x;
+                    soldiers[i].y += soldiers[i].speed_y;
+                }
+            }
+            else{
+                soldiers[i].x += soldiers[i].speed_x;
+                soldiers[i].y += soldiers[i].speed_y;
+            }
+            check_soldier_is_in_dest(&soldiers[i]);
         }
     }
     check_soldiers_collision();

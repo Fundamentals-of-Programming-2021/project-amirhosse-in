@@ -11,33 +11,37 @@
 #include "io.c"
 SDL_Texture* user_name_texture;
 SDL_Rect user_name_rect;
-Button  buttons_get_user[4];
-SDL_Texture* blue_captions_get_user[4];
-SDL_Texture* black_captions_get_user[4];
-int buttons_count_get_user = 4;
+Button  buttons_get_user[1];
+SDL_Texture* blue_captions_get_user[1];
+SDL_Texture* black_captions_get_user[1];
+SDL_Texture* caption_get_user;
+int buttons_count_get_user = 1;
+SDL_Rect caption_get_user_rect;
 void init_primary_textures_getuser(SDL_Renderer* renderer){
     for(int i=0;i<buttons_count_get_user;i++){
-        buttons_get_user[i].x = 135 + 185*i;
+        buttons_get_user[i].x = 412 + 185*i;
         buttons_get_user[i].y = 500;
         buttons_get_user[i].w =175;
         buttons_get_user[i].h = 70;
         buttons_get_user[i].caption = (char*) malloc(sizeof(char) * 50);
     }
-    sprintf(buttons_get_user[0].caption , "Add");
-    sprintf(buttons_get_user[1].caption , "Remove");
-    sprintf(buttons_get_user[2].caption , "Login");
-    sprintf(buttons_get_user[3].caption , "Back");
+    sprintf(buttons_get_user[0].caption , "Login");
     for(int i=0;i<buttons_count_get_user;i++){
         blue_captions_get_user[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_get_user[i].caption, blue);
         black_captions_get_user[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_get_user[i].caption, black);
     }
+    user_name_rect.x = 400;
+    user_name_rect.y = 400;
+
+    caption_get_user = getTextTexture(renderer, "./files/fonts/liber.ttf","Enter your name: ",black);
+    caption_get_user_rect.x = 163;
+    caption_get_user_rect.y = 400;
+    SDL_QueryTexture(caption_get_user, NULL, NULL, &caption_get_user_rect.w, &caption_get_user_rect.h);
 }
 
 void create_new_username_texture(SDL_Renderer* renderer, char* name){
     SDL_DestroyTexture(user_name_texture);
     user_name_texture = getTextTexture(renderer, "./files/fonts/liber.ttf", name, black);
-    user_name_rect.x = 100;
-    user_name_rect.y = 100;
     SDL_QueryTexture(user_name_texture, NULL, NULL, &user_name_rect.w, &user_name_rect.h);
 }
 
@@ -45,7 +49,10 @@ void draw_get_user_name(SDL_Renderer* renderer){
     SDL_Rect rect = {.x=0 , .y = 0, .w = window_width, .h = window_height};
     SDL_Rect trect;
     SDL_RenderCopyEx(renderer, bg_menu, NULL, &rect, 0 ,NULL, 0); 
+    roundedBoxRGBA(renderer,caption_get_user_rect.x-5, caption_get_user_rect.y-5,caption_get_user_rect.x+caption_get_user_rect.w+5,caption_get_user_rect.y+caption_get_user_rect.h+5,5,255,255,255,100);
+    SDL_RenderCopyEx(renderer, caption_get_user, NULL, &caption_get_user_rect,0,NULL,0);
     if(strlen(user_name)){
+        roundedBoxRGBA(renderer, user_name_rect.x, user_name_rect.y-5,user_name_rect.x+user_name_rect.w+5,user_name_rect.y+user_name_rect.h+5,5,255,255,255,100);
         SDL_RenderCopyEx(renderer, user_name_texture, NULL, &user_name_rect, 0 ,NULL, 0); 
     }
     for(int i=0;i<buttons_count_get_user;i++){
@@ -71,24 +78,14 @@ void draw_get_user_name(SDL_Renderer* renderer){
 }
 
 void add_user(SDL_Renderer* renderer){
-    int flag = 0;
-                    for(int j=0;j<user_counts;j++){
-                        if(strcmp( user_names[j], user_name) == 0){
-                            flag = 1;
-                        }
-                    }
-                    if(!flag){
-                        user_counts++;
-                        user_names = realloc(user_names, sizeof(char*) * (user_counts+1));
-                        user_names[user_counts-1] = malloc(sizeof(char) * 50);
-                        strcpy(user_names[user_counts-1], user_name);
-                        user_name[0] = '\0';
-                        create_new_username_texture(renderer, user_name);
-                        add_new_message("User added!", green,0);
-                        save_user_names();
-                    }else {
-                        add_new_message("User already exist!", red,0);
-                    }
+    user_counts++;
+    user_names = realloc(user_names, sizeof(char*) * (user_counts+1));
+    user_names[user_counts-1] = malloc(sizeof(char) * 50);
+    strcpy(user_names[user_counts-1], user_name);
+    user_name[0] = '\0';
+    create_new_username_texture(renderer, user_name);
+    add_new_message("User added!", green,0);
+    save_user_names();
 }
 
 void remove_user(SDL_Renderer* renderer){
@@ -136,17 +133,18 @@ void detect_click_get_user(SDL_Renderer* renderer, int x, int y){
         &&  y - buttons_get_user[i].y <= buttons_get_user[i].h && y - buttons_get_user[i].y >= 0){
             switch(i){
                 case 0:{
-                    add_user(renderer);
-                }break;
-                case 1:{
-                    remove_user(renderer);
-                }break;
-                case 2:{
-                    login(renderer);
-                }break;
-                case 3:{
+                    int flag = 0;
+                    for(int j=0;j<user_counts;j++){
+                        if(strcmp( user_names[j], user_name) == 0){
+                            login(renderer);
+                            flag = 1;
+                        }
+                    }
+                    if(!flag){
+                        add_user(renderer);
+                        login(renderer);
+                    }
                     window_state = 1;
-                    free(user_name);
                 }break;
             }
         }

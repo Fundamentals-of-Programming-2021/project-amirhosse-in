@@ -9,6 +9,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL_ttf.h>
 #include "./cfiles/io.c"
 #include "./cfiles/soldiers.c"
 #include "./cfiles/map.c"
@@ -16,8 +17,7 @@
 #include "./cfiles/ai.h"
 
 //protypes
-//void draw_camps(SDL_Renderer* renderer);
-void attack(int base_id, int dest_id);
+
 //this function initialize primary thing like generating map and etc.
 void game_generator(SDL_Renderer* renderer){
     load_user_names();
@@ -82,11 +82,56 @@ void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
         if(map[dest_y][dest_x] * map[base_y][base_x] == 0 || abs(map[dest_y][dest_x]) == abs(map[base_y][base_x])){
             add_new_message("Invalid attack!", red,0);
         }else{
-            attack(abs(map[base_y][base_x]), abs(map[dest_y][dest_x]));
+            attack(abs(map[base_y][base_x]), abs(map[dest_y][dest_x]), 1);
         }
     }
     else {
         //invalid attack
+    }
+}
+void win(SDL_Renderer* renderer){
+    int online_teams[5]={0};
+    for(int i=0;i<cities_count;i++){
+        if(cities[i].team != 0) online_teams[cities[i].team] = 1;
+    }
+    for(int i=0;i<soldiers_count;i++){
+        if(soldiers[i].dest_x!= -1) online_teams[soldiers[i].team]=1;
+    }
+    int online_teams_count =0;
+    int winner=-1;
+    for(int i=0;i<5;i++)
+    {
+        online_teams_count+=online_teams[i];
+        if(online_teams[i])winner=i;
+    }
+    if(online_teams_count == 1){
+        //winner
+        SDL_Rect r;
+        SDL_QueryTexture(winning_caption[winner-1],NULL, NULL, &r.w, &r.h);
+        r.x = 500-(r.w)/2;
+        r.y = 400-(r.h)/2;
+        switch (winner){
+            case 1:{
+                printf("red won");
+                roundedBoxRGBA(renderer, 350,325,650,475,10,my_red.r,my_red.g,my_red.b,100);
+            }break;
+            case 2:{
+                printf("blue won");
+                roundedBoxRGBA(renderer, 350,325,650,475,10,my_blue.r,my_blue.g,my_blue.b,100);
+            }break;
+            case 3:{
+                printf("green won");
+                roundedBoxRGBA(renderer, 350,325,650,475,10,my_green.r,my_green.g,my_green.b,100);
+            }break;
+            case 4:{
+                printf("gray won");
+                roundedBoxRGBA(renderer, 350,325,650,475,10,my_gray.r,my_gray.g,my_gray.b,100);
+            }break;
+        }
+        SDL_RenderCopyEx(renderer, winning_caption[winner-1], NULL, &r, 0,NULL,0);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(3000);
+        window_state = 1;
     }
 }
 

@@ -14,14 +14,13 @@ int is_city_under_attack(int city_index);
 int is_city_attacking(int city_index);
 int distance_calculator(int* base_cities_index,int city_count, int dest_city_index);
 int soldier_counter(int* city_indexes, int city_count);
-void attack(int base_id, int dest_id);
+void attack(int base_id, int dest_id, int is_human);
 int team_city_counter(int team);
 int* team_city_finder(int city_count, int team);
 int delta_soldiers(int* base_cities_index, int city_count, int dest_index);
 int extract_city_from_bitmask(int* out, int bitmask, int* city_indexes, int city_count);
 long long scoring(int* city_indexes, int city_count, int destination_index);
 void ai();
-void attack(int base_id, int dest_id);
 
 //scoring: this function checks that a city is under attack or no
 int is_city_under_attack(int city_index){
@@ -143,7 +142,7 @@ void ai(){
                 int count_of_city = extract_city_from_bitmask(city, i, team_city, city_count);
                 int soldiers_count_on_cities = soldier_counter(city, count_of_city);
                 for(int j=0; j < cities_count; j++){
-                    if(cities[j].team != team_i && is_city_under_attack(j) == 0 &&cities[j].soldier_counts + 5< soldiers_count_on_cities){
+                    if(cities[j].team != team_i && is_city_under_attack(j) == 0 &&cities[j].soldier_counts + 5< soldiers_count_on_cities && potion_state[cities[j].team] != 5){
                         score = scoring(city, count_of_city, j);
                         if(final_dest == -1){
                             max_score = score;
@@ -161,7 +160,7 @@ void ai(){
             }
             if(final_dest != -1){
                 for(int i=0;i<final_cities_count;i++){
-                    attack(cities[final_cities[i]].id, cities[final_dest].id);
+                    attack(cities[final_cities[i]].id, cities[final_dest].id,0);
                 }
                 ai_tick[team_i] += rand()%5;
             }
@@ -171,12 +170,15 @@ void ai(){
 }
 
 //this function applies a attack
-void attack(int base_id, int dest_id){
+void attack(int base_id, int dest_id, int is_human){
     int base_index = id_to_city_index(base_id);
     int dest_index = id_to_city_index(dest_id);
-    if(cities[base_index].team == 0){
+    if(is_human && cities[base_index].team != player_id){
        add_new_message("You just can choose your color!", red,0);
-    }else{
+    }else if(cities[dest_index].team != cities[base_index].team && potion_state[cities[dest_index].team] == 5){
+        add_new_message("Enemy have shield potion!!!!",red, 0);
+    }
+    else{
         cities[base_index].dest_counts++;
         if(cities[base_index].max_dest_counts < cities[base_index].dest_counts + 1){
             cities[base_index].dest_id = (int*) realloc(cities[base_index].dest_id, sizeof(int) * (cities[base_index].dest_counts + 1));

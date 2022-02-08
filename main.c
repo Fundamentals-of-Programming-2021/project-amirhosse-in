@@ -9,6 +9,7 @@
 #include "./cfiles/menu.c"
 #include "./cfiles/getuser.c"
 #include "./cfiles/map_menu.c"
+#include "./cfiles/potions.c"
 int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -86,9 +87,12 @@ int main() {
             draw_soldiers(renderer);
             soldier_watcher();
             city_watcher();
+            potion_watcher();
+            draw_potions(renderer);
             draw_explosions(renderer);
             ai();
             mouse_hover(renderer, current_mouse_x,current_mouse_y,pressed_x, pressed_y, is_mouse_pressed);
+            win(renderer);
         }else if(window_state == 3){
             draw_get_user_name(renderer);
         }else if(window_state == 4){

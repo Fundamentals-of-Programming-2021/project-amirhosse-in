@@ -8,13 +8,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
+#include "io.c"
 #include "global.c" 
 #include "soldiers.c"
 //temporary prototypes
 void send_soldier(int base_city_index, int dest_city_index, int index);
 void generate_soldier(int count, int team, int city_id);
-
-
+void draw_standing(SDL_Renderer* renderer);
+SDL_Texture *getTextTexture(SDL_Renderer *sdlRenderer, char* font_path, char* caption, SDL_Color color);
 void draw_camps(SDL_Renderer* renderer);
 void city_watcher();
 int check_is_valid_camp(int row, int column);
@@ -61,7 +63,6 @@ City* find_camps(){
                 cities[(cities_count)-1].last_tick_for_growth = 0;
                 cities[(cities_count)-1].max_dest_counts = 0;
                 cities[(cities_count)-1].dest_counts= 0;
-
             }
         }
     }
@@ -101,18 +102,6 @@ int id_to_city_index(int map_number){
 //this function sends soldiers for attacking and increase count of soldiers
 void city_watcher(){
     for(int i=0;i<cities_count;i++){
-        /*if(cities[i].soldiers_to_move > 0 && start_ticks - cities[i].last_tick_for_attack > 300){
-			if(cities[i].soldier_counts < cities[i].soldiers_to_move){
-                cities[i].soldiers_to_move = cities[i].soldier_counts;  
-                if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
-			}
-            if(cities[i].soldiers_to_move > 0){
-                send_soldier(i, cities[i].dest_id);
-                cities[i].last_tick_for_attack = start_ticks;
-                if(cities[i].soldiers_to_move == 0) cities[i].dest_id = -1;
-                break;
-		    }
-        }*/
         int total_soldier_to_move = 0;
         for(int j=0;j<cities[i].dest_counts;j++){
             total_soldier_to_move += cities[i].soldiers_to_move[j];
@@ -146,11 +135,26 @@ void city_watcher(){
                 }
             }
         }
-        if(cities[i].soldier_counts < max_grow_soldier
-        && start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate
-        && cities[i].team != 0){
-            generate_soldier(1, cities[i].team, cities[i].id);
-            cities[i].last_tick_for_growth = start_ticks;
+        if(potion_state[cities[i].team] == 4){
+            if( start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate
+            && cities[i].team != 0){
+                generate_soldier(1, cities[i].team, cities[i].id);
+                cities[i].last_tick_for_growth = start_ticks;
+            }
+        }else if(potion_state[cities[i].team] == 6){
+            if(cities[i].soldier_counts < max_grow_soldier
+            && start_ticks - cities[i].last_tick_for_growth > 200/cities[i].growth_rate
+            && cities[i].team != 0){
+                generate_soldier(1, cities[i].team, cities[i].id);
+                cities[i].last_tick_for_growth = start_ticks;
+            }
+        }else{
+            if(cities[i].soldier_counts < max_grow_soldier
+            && start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate
+            && cities[i].team != 0){
+                generate_soldier(1, cities[i].team, cities[i].id);
+                cities[i].last_tick_for_growth = start_ticks;
+            }
         }
     }
 }
@@ -176,7 +180,55 @@ void draw_camps(SDL_Renderer* renderer){
         sprintf(buffer, "%d", cities[i].soldier_counts);
         stringRGBA(renderer, x +20, y + 3, buffer, 255,255,255,255);
     }
+    draw_standing(renderer);
     free(buffer);
 }
-
+void draw_standing(SDL_Renderer* renderer){
+    int sigma_soldier[5];
+    for(int i=0;i<5;i++) teams_standing[i] =-1;
+    for(int i=0;i<cities_count;i++){
+        teams_standing[cities[i].team] = cities[i].team;
+        sigma_soldier[cities[i].team]+= cities[i].soldier_counts;
+    }
+    sigma_soldier[0] = -1;
+    for(int i=0;i<soldiers_count;i++) {
+        if(soldiers[i].dest_x != -1){
+             sigma_soldier[soldiers[i].team]++;
+             teams_standing[soldiers[i].team] = soldiers[i].team;
+        }
+    }
+    for(int i=0;i<5;i++){
+        for(int j=i;j<5;j++){
+            if(sigma_soldier[i] < sigma_soldier[j]){
+                int temp = sigma_soldier[i];
+                sigma_soldier[i] = sigma_soldier[j];
+                sigma_soldier[j] = temp;
+                temp = teams_standing[i];
+                teams_standing[i] = teams_standing[j];
+                teams_standing[j] = temp;
+            }
+        }
+    }
+    int current_active =0;
+    SDL_Rect r;
+    for(int i=0;i<players_count;i++){
+        if(teams_standing[i] != -1){
+            char count[5];
+            sprintf(count,"%d",sigma_soldier[i]);
+            r.x = 800;
+            r.y = 80+80*current_active;
+            r.h = r.w = 70;
+            switch (teams_standing[i])
+            {
+                case 1:{SDL_RenderCopyEx(renderer, red_camp, NULL,&r, 0, NULL, SDL_FLIP_NONE);}break;
+                case 2:{SDL_RenderCopyEx(renderer, blue_camp, NULL,&r, 0, NULL, SDL_FLIP_NONE);}break;
+                case 3:{SDL_RenderCopyEx(renderer, green_camp, NULL,&r, 0, NULL, SDL_FLIP_NONE);}break;
+                case 4:{SDL_RenderCopyEx(renderer, gray_camp, NULL,&r, 0, NULL, SDL_FLIP_NONE);}break;
+                default:break;
+            }
+            current_active++;
+            stringRGBA(renderer, r.x+50, r.y,count,0,0,0,255);
+        }
+    }
+}
 #endif

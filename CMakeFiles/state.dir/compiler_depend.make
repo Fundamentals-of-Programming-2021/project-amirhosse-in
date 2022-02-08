@@ -193,6 +193,7 @@ CMakeFiles/state.dir/main.c.o: main.c \
   /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h \
   game.h \
   game.c \
+  /opt/homebrew/include/SDL2/SDL_ttf.h \
   cfiles/io.c \
   cfiles/global.c \
   /opt/homebrew/include/SDL2/SDL_mixer.h \
@@ -201,19 +202,17 @@ CMakeFiles/state.dir/main.c.o: main.c \
   cfiles/explosion.h \
   cfiles/ai.h \
   cfiles/camps.c \
-  /opt/homebrew/include/SDL2/SDL_ttf.h \
   cfiles/menu.c \
   cfiles/map_menu.c \
-  cfiles/getuser.c
+  cfiles/getuser.c \
+  cfiles/potions.c
 
+
+cfiles/potions.c:
 
 cfiles/map_menu.c:
 
 cfiles/explosion.h:
-
-/opt/homebrew/include/SDL2/begin_code.h:
-
-cfiles/soldiers.c:
 
 /opt/homebrew/include/SDL2/SDL_mixer.h:
 
@@ -596,6 +595,10 @@ cfiles/getuser.c:
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/secure/_strings.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.0.sdk/usr/include/sys/_types/_null.h:
+
+cfiles/soldiers.c:
+
+/opt/homebrew/include/SDL2/begin_code.h:
 
 /opt/homebrew/include/SDL2/SDL_pixels.h:
 

@@ -190,6 +190,7 @@ CMakeFiles/state.dir/main.c.o: \
   /opt/homebrew/include/SDL2/SDL2_gfxPrimitives.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/game.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/game.c \
+  /opt/homebrew/include/SDL2/SDL_ttf.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/io.c \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/global.c \
   /opt/homebrew/include/SDL2/SDL_mixer.h \
@@ -198,7 +199,7 @@ CMakeFiles/state.dir/main.c.o: \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/explosion.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/ai.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/camps.c \
-  /opt/homebrew/include/SDL2/SDL_ttf.h \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/menu.c \
   /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/map_menu.c \
-  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/getuser.c
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/getuser.c \
+  /Users/amirhossein/Documents/university/t1/fop/Project/project-amirhosse-in/./cfiles/potions.c
