@@ -12,6 +12,7 @@ CMakeFiles/state.dir/main.c.o: cfiles/map_menu.c
 CMakeFiles/state.dir/main.c.o: cfiles/menu.c
 CMakeFiles/state.dir/main.c.o: cfiles/potions.c
 CMakeFiles/state.dir/main.c.o: cfiles/soldiers.c
+CMakeFiles/state.dir/main.c.o: cfiles/standing.c
 CMakeFiles/state.dir/main.c.o: game.c
 CMakeFiles/state.dir/main.c.o: game.h
 CMakeFiles/state.dir/main.c.o: main.c

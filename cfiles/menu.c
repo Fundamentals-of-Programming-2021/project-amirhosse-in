@@ -8,6 +8,7 @@
 #include "io.c"
 #include <SDL2/SDL_ttf.h>
 #include "map_menu.c"
+#include "standing.c"
 Button  buttons[4];
 SDL_Texture* blue_captions[4];
 SDL_Texture* black_captions[4];
@@ -23,7 +24,7 @@ void init_buttons(SDL_Renderer* renderer){
         buttons[i].caption = (char*) malloc(sizeof(char) * 50);
     }
     sprintf(buttons[0].caption , "Play");
-    sprintf(buttons[1].caption , "User");
+    sprintf(buttons[1].caption , "Standing");
     sprintf(buttons[2].caption , "Maps");
     for(int i=0;i<buttons_count;i++){
         blue_captions[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons[i].caption, blue_color);
@@ -68,9 +69,9 @@ void detect_click(SDL_Renderer* renderer, int x, int y){
                         window_state = 2;
                     }
                 }break;
-                case 1:{//users
-                    user_name = (char*) malloc(sizeof(char) * 50);
-                    window_state = 3;
+                case 1:{//Standing
+                    init_textures_standing(renderer);
+                    window_state = 5;
                 }break;
                 case 2:{//maps 
                     init_buttons_map_menu(renderer);

@@ -183,6 +183,8 @@ SDL2/SDL_ttf.h
 -
 map_menu.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
+standing.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.c
 time.h
@@ -229,6 +231,26 @@ ai.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
 camps.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
+time.h
+-
+stdio.h
+-
+stdbool.h
+-
+stdlib.h
+-
+math.h
+-
+SDL2/SDL.h
+-
+SDL2/SDL2_gfxPrimitives.h
+-
+SDL2/SDL_ttf.h
+-
+io.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
 
 /home/amirhossein/Documents/project-amirhosse-in/game.c
 game.h
@@ -289,4 +311,6 @@ game.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
 ./cfiles/potions.c
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.c
+./cfiles/standing.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
 

@@ -92,6 +92,13 @@ int fill_city(int row, int column,int city_id){
 
 //this function generates a map
 void map_generator( int* city_count){
+    for(int i=0;i<50;i++)cities_available[i]=0;
+    for(int i=0;i<map_width/map_cell_side;i++){
+        for(int j=0;j<map_height/map_cell_side;j++){
+            map[i][j] =0;
+        }
+    }
+    for(int i=0;i<4000;i++) city_border[i][0] = city_border[i][1] = 0;
     int n =-1;
     int final_counts = 0;
     for(int i=0;i<*city_count;i++){
@@ -113,7 +120,6 @@ void map_generator( int* city_count){
     }
     *city_count = final_counts;
     specify_border();
-    
 }
 
 //it just called by find_big_area()

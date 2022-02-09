@@ -55,7 +55,7 @@ typedef struct Message{
 } Message;
 const int window_height = 800;
 const int window_width = 1000;
-int window_state = 3;//1: menu, 2: game, 3: get username, 4: maps
+int window_state = 3;//1: menu, 2: game, 3: get username, 4: maps, 5: standing
 const int FPS = 60 ;
 const int EXIT = 12345;
 char* user_name;
@@ -160,6 +160,7 @@ SDL_Texture *btn_main;
 //ranking
 int user_counts = 0;
 char** user_names;
+int* users_scores;
 int logined = 0;
 //messages;
 int messages_count = 0;

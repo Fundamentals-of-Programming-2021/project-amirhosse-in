@@ -32,7 +32,6 @@ void game_generator(SDL_Renderer* renderer){
     soldiers = (Soldier*) malloc(sizeof(Soldier));
     for(int i=0;i<5;i++){
         ai_tick[i]=rand()%5;
-        printf("we rand %d\n", ai_tick[i]);
     }
     explosions = (Explosion*) malloc(sizeof(Soldier));
     //map_generator( &city_count);
@@ -46,8 +45,6 @@ void game_generator(SDL_Renderer* renderer){
     save_map_camps("camps1.cmp");
     clock_t bbbb = clock();
     double time_s  = (double)(bbbb-aaaa)/CLOCKS_PER_SEC;
-    printf("we could generete %d cities in %lf seconds\n", cities_count, time_s);
-
 }
 
 //this function draw a mouse curser and moving line
@@ -105,6 +102,11 @@ void win(SDL_Renderer* renderer){
         if(online_teams[i])winner=i;
     }
     if(online_teams_count == 1){
+        if(winner == 1){
+            users_scores[user_id] += 30;
+        }
+        else users_scores[user_id] -= 10;
+        save_user_names();
         //winner
         SDL_Rect r;
         SDL_QueryTexture(winning_caption[winner-1],NULL, NULL, &r.w, &r.h);
@@ -112,22 +114,29 @@ void win(SDL_Renderer* renderer){
         r.y = 400-(r.h)/2;
         switch (winner){
             case 1:{
-                printf("red won");
                 roundedBoxRGBA(renderer, 350,325,650,475,10,my_red.r,my_red.g,my_red.b,100);
             }break;
             case 2:{
-                printf("blue won");
                 roundedBoxRGBA(renderer, 350,325,650,475,10,my_blue.r,my_blue.g,my_blue.b,100);
             }break;
             case 3:{
-                printf("green won");
                 roundedBoxRGBA(renderer, 350,325,650,475,10,my_green.r,my_green.g,my_green.b,100);
             }break;
             case 4:{
-                printf("gray won");
                 roundedBoxRGBA(renderer, 350,325,650,475,10,my_gray.r,my_gray.g,my_gray.b,100);
             }break;
         }
+        for(int j=0;j<cities_count;j++) {cities[j].team =0;free(cities[j].dest_id);free(cities[j].soldiers_to_move);}
+        for(int j=0;j<50;j++) cities_available[j] =0 ;
+        free(cities);
+        cities = find_camps();
+        assign_camps_to_players();
+        for(int j=0;j<cities_count;j++)if(cities[j].team!=0) cities[j].soldier_counts=0;
+        free(soldiers);
+        soldiers_count =0;
+        max_soldiers_count=0;
+        soldiers = (Soldier*) malloc(sizeof(Soldier));
+        first_init_soldiers();
         SDL_RenderCopyEx(renderer, winning_caption[winner-1], NULL, &r, 0,NULL,0);
         SDL_RenderPresent(renderer);
         SDL_Delay(3000);

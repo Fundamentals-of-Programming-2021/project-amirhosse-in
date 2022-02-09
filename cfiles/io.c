@@ -111,10 +111,16 @@ void load_map_camps(char* path){
     }
     fclose(f);
 }
+
 void save_user_names(){
     FILE* f = fopen("usernames.usr", "w+");
     for(int i=0;i < user_counts;i++){
         fprintf(f,"%s\n",user_names[i]);
+    }
+    fclose(f);
+    f = fopen("scores.scr", "w+");
+    for(int i=0;i<user_counts;i++){
+        fprintf(f,"%d\n", users_scores[i]);
     }
     fclose(f);
 }
@@ -132,7 +138,30 @@ void load_user_names(){
         user_names[user_counts] = malloc(sizeof(char) * 50);
     }
     fclose(f);
+    users_scores = malloc(sizeof(int) * user_counts);
+    f = fopen("scores.scr", "r");
+    for(int i=0;i<user_counts;i++){
+        fscanf(f, "%d", users_scores+i);
+    }
+    fclose(f);
 }
+void sort_scores(){
+    for(int i=0;i<user_counts;i++){
+        for(int j=i;j<user_counts;j++){
+            if(users_scores[i] < users_scores[j]){
+                int temp = users_scores[i];
+                users_scores[i] = users_scores[j];
+                users_scores[j] = temp;
+                char tempo[50] = "";
+                strcpy(tempo, user_names[i]);
+                strcpy(user_names[i], user_names[j]);
+                strcpy(user_names[j], tempo);
+            }
+        }
+    }
+}
+
+
 SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path) {
     SDL_Surface *image = SDL_LoadBMP(image_path);
     /* Let the user know if the file failed to load */

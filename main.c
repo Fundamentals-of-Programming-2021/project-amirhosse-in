@@ -10,6 +10,7 @@
 #include "./cfiles/getuser.c"
 #include "./cfiles/map_menu.c"
 #include "./cfiles/potions.c"
+#include "./cfiles/standing.c"
 int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -53,6 +54,8 @@ int handleEvents(SDL_Renderer* renderer) {
                     detect_click_get_user(renderer, event.button.x, event.button.y);
                 }else if(window_state == 4){
                     detect_click_map_menu(renderer, event.button.x, event.button.y,0);
+                }else if(window_state == 5){
+                    detect_click_standing( event.button.x, event.button.y);
                 }
             }
         }
@@ -67,7 +70,6 @@ int main() {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    printf("%d\n", sizeof(Soldier));
     messages = (Message*) malloc(sizeof(Message));
     game_generator(renderer);
     init_buttons(renderer);
@@ -98,6 +100,8 @@ int main() {
             draw_get_user_name(renderer);
         }else if(window_state == 4){
             draw_map_menu(renderer);
+        }else if(window_state == 5){
+            standing_renderer(renderer);
         }
         messages_watcher(renderer);
     	SDL_RenderPresent(renderer);

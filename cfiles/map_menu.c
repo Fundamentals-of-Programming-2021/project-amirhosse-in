@@ -34,7 +34,14 @@ void init_buttons_map_menu(SDL_Renderer* renderer){
         black_textures_map_menu[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_map_menu[i].caption, black);
     }
 }
-
+void destory_buttons_map_menu(){
+    free(blue_textures_map_menu);
+    free(black_textures_map_menu);
+    for(int i=0;i<maps_count+2;i++){
+        free(buttons_map_menu[i].caption);
+    }
+    free(buttons_map_menu);
+}
 void draw_map_menu(SDL_Renderer* renderer){
     SDL_Rect rect = {.x=0 , .y = 0, .w = window_width, .h = window_height};
     SDL_Rect trect;
@@ -71,12 +78,13 @@ void detect_click_map_menu(SDL_Renderer* renderer, int x, int y, int count){
             sprintf(path, "./maps/map%d.map", i+1);
             load_map(path);
             load_map_count("./maps/maps.map");
-            for(int i=0;i<cities_count;i++) {cities[i].team =0;free(cities[i].dest_id);free(cities[i].soldiers_to_move);}
-            for(int i=0;i<50;i++) cities_available[i] =0 ;
+            for(int j=0;j<cities_count;j++) {cities[j].team =0;free(cities[j].dest_id);free(cities[j].soldiers_to_move);}
+            for(int j=0;j<50;j++) cities_available[j] =0 ;
             free(cities);
             cities = find_camps();
             sprintf(path, "./maps/camps%d.cmp", i+1);
             load_map_camps(path);
+            for(int j=0;j<cities_count;j++)if(cities[j].team!=0) cities[j].soldier_counts=0;
             free(soldiers);
             soldiers_count =0;
             max_soldiers_count=0;
@@ -88,9 +96,33 @@ void detect_click_map_menu(SDL_Renderer* renderer, int x, int y, int count){
          if( x - buttons_map_menu[i].x <= buttons_map_menu[i].w && x - buttons_map_menu[i].x >= 0
         &&  y - buttons_map_menu[i].y <= buttons_map_menu[i].h && y - buttons_map_menu[i].y >= 0){
             if(i == maps_count){
-
+                destory_buttons_map_menu();
+                maps_count++;
+                save_map_count("./maps/maps.map");
+                init_buttons_map_menu(renderer);
+                for(int i=0;i<cities_count;i++) {cities[i].team =0;free(cities[i].dest_id);free(cities[i].soldiers_to_move);}
+                for(int i=0;i<50;i++) cities_available[i] =0 ;
+                free(cities);
+                free(soldiers);
+                cities_count=0;
+                soldiers_count =0;
+                max_soldiers_count=0;
+                soldiers = (Soldier*) malloc(sizeof(Soldier));
+                int city_count = rand()%5+40;
+                map_generator( &city_count);
+                remove_border_city();
+                cities = find_camps();
+                clean_map_from_non_camps_city();
+                assign_camps_to_players();
+                first_init_soldiers();
+                char path[50];
+                sprintf(path, "./maps/map%d.map", maps_count);
+                save_map(path);
+                sprintf(path, "./maps/camps%d.cmp",maps_count);
+                save_map_camps(path);
             }else if(i == maps_count+1){
                 window_state = 1;
+                destory_buttons_map_menu();
             }
         }
     }

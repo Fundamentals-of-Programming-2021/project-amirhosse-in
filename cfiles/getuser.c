@@ -80,35 +80,13 @@ void draw_get_user_name(SDL_Renderer* renderer){
 void add_user(SDL_Renderer* renderer){
     user_counts++;
     user_names = realloc(user_names, sizeof(char*) * (user_counts+1));
+    users_scores = realloc(users_scores, sizeof(int) * (user_counts+1));
     user_names[user_counts-1] = malloc(sizeof(char) * 50);
+    users_scores[user_counts-1] = 0;
     strcpy(user_names[user_counts-1], user_name);
-    user_name[0] = '\0';
     create_new_username_texture(renderer, user_name);
     add_new_message("User added!", green,0);
     save_user_names();
-}
-
-void remove_user(SDL_Renderer* renderer){
-    int flag = 0;
-                    for(int j=0;j<user_counts;j++){
-                        if(strcmp( user_names[j], user_name) == 0){
-                            for(int q=j;q<user_counts-1;q++){
-                                strcpy(user_names[q], user_names[q+1]);
-                            }
-                            flag = 1;
-                            user_counts--;
-                        }
-                    }
-                    if(flag){
-                        user_name[0] = '\0';
-                        create_new_username_texture(renderer, user_name);
-                        add_new_message("DONE!", green,0);
-                        save_user_names();
-                    }else{
-                        char* buffer=  malloc(sizeof(char) * 50);
-                        sprintf(buffer, "%s not found",user_name);
-                        add_new_message(buffer, red,1);
-                    }
 }
 
 void login(SDL_Renderer* renderer){
@@ -133,18 +111,22 @@ void detect_click_get_user(SDL_Renderer* renderer, int x, int y){
         &&  y - buttons_get_user[i].y <= buttons_get_user[i].h && y - buttons_get_user[i].y >= 0){
             switch(i){
                 case 0:{
-                    int flag = 0;
-                    for(int j=0;j<user_counts;j++){
-                        if(strcmp( user_names[j], user_name) == 0){
-                            login(renderer);
-                            flag = 1;
+                    if(strlen(user_name) == 0){
+                        add_new_message("Enter your name!", red , 0);
+                    }else{
+                        int flag = 0;
+                        for(int j=0;j<user_counts;j++){
+                            if(strcmp( user_names[j], user_name) == 0){
+                                login(renderer);
+                                flag = 1;
+                            }
                         }
+                        if(!flag){
+                            add_user(renderer);
+                            login(renderer);
+                        }
+                        window_state = 1;
                     }
-                    if(!flag){
-                        add_user(renderer);
-                        login(renderer);
-                    }
-                    window_state = 1;
                 }break;
             }
         }

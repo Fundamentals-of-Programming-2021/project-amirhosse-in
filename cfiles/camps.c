@@ -153,8 +153,8 @@ void city_watcher(){
             if(cities[i].soldier_counts < max_grow_soldier
             && start_ticks - cities[i].last_tick_for_growth > 1000/cities[i].growth_rate
             && cities[i].team != 0){
-                generate_soldier(1, cities[i].team, cities[i].id);
-                cities[i].last_tick_for_growth = start_ticks;
+               generate_soldier(1, cities[i].team, cities[i].id);
+               cities[i].last_tick_for_growth = start_ticks;
             }
         }
     }
@@ -216,7 +216,6 @@ void draw_standing(SDL_Renderer* renderer){
         if(teams_standing[i] != -1){
             char count[5];
             sprintf(count,"%d",sigma_soldier[i]);
-            if(start_ticks % 1000 > 995) printf("%d\n", sigma_soldier[i]);
             r.x = 800;
             r.y = 80+80*current_active;
             r.h = r.w = 70;
