@@ -221,14 +221,14 @@ int color_picker(int id){
         case -3:out=0xff404D00;break;
         case 4:out=0xff7A6E54;break;//gray
         case -4:out=0xff383226;break;
-        default: printf("we found a bug here\n");break;
+        default: printf("we found a bug here%d and %d and index:%d\n", x,id, id_to_city_index(abs(id)));break;
     }
     return out;
 }
 
 //this function draws map on renderer
 void draw_map(SDL_Renderer* renderer){
-    SDL_Rect bg_rect = {.x = 0, .y = 0, .h = window_height , .w = window_width};
+    SDL_Rect bg_rect = {.x = 0, .y = 0, .w = window_width, .h = window_height };
     int x,y;
     for(int i=0;i<map_height/map_cell_side;i++){
         for(int j=0;j<map_width/map_cell_side;j++){

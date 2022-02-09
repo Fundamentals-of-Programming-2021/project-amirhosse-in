@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/state.dir/main.c.o"
-  "CMakeFiles/state.dir/main.c.o.d"
   "state"
   "state.pdb"
 )

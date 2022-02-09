@@ -42,6 +42,7 @@ int check_is_valid_camp(int row, int column){
 
 //this functions searches for big cities wich can have a camp
 City* find_camps(){
+    cities_count =0;
     City* cities;
     cities = (City*) malloc(sizeof(City));
     for(int i=0;i< map_height/map_cell_side;i++){
@@ -185,7 +186,7 @@ void draw_camps(SDL_Renderer* renderer){
 }
 void draw_standing(SDL_Renderer* renderer){
     int sigma_soldier[5];
-    for(int i=0;i<5;i++) teams_standing[i] =-1;
+    for(int i=0;i<5;i++) {teams_standing[i] =-1; sigma_soldier[i] = 0;}
     for(int i=0;i<cities_count;i++){
         teams_standing[cities[i].team] = cities[i].team;
         sigma_soldier[cities[i].team]+= cities[i].soldier_counts;
@@ -215,6 +216,7 @@ void draw_standing(SDL_Renderer* renderer){
         if(teams_standing[i] != -1){
             char count[5];
             sprintf(count,"%d",sigma_soldier[i]);
+            if(start_ticks % 1000 > 995) printf("%d\n", sigma_soldier[i]);
             r.x = 800;
             r.y = 80+80*current_active;
             r.h = r.w = 70;

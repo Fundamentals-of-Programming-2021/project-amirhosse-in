@@ -14,10 +14,10 @@ SDL_Texture** black_textures_map_menu;
 Button *buttons_map_menu;
 void init_buttons_map_menu(SDL_Renderer* renderer){
     load_map_count("./maps/maps.map");
-    blue_textures_map_menu = malloc(sizeof(SDL_Texture*) * maps_count);
-    black_textures_map_menu = malloc(sizeof(SDL_Texture*) * maps_count);
-    buttons_map_menu = malloc(sizeof(Button) * maps_count);
-    for(int i=0;i<maps_count;i++){
+    blue_textures_map_menu = malloc(sizeof(SDL_Texture*) * (maps_count+2));
+    black_textures_map_menu = malloc(sizeof(SDL_Texture*) * (maps_count+2));
+    buttons_map_menu = malloc(sizeof(Button) * (2+maps_count));
+    for(int i=0;i<maps_count+2;i++){
         buttons_map_menu[i].x = 790;
         buttons_map_menu[i].y = 10 + 80 * i;
         buttons_map_menu[i].w =175;
@@ -27,7 +27,9 @@ void init_buttons_map_menu(SDL_Renderer* renderer){
     for(int i=0;i<maps_count;i++){
         sprintf(buttons_map_menu[i].caption,"map %d" ,i+1);
     }
-    for(int i=0;i<maps_count;i++){
+    sprintf(buttons_map_menu[maps_count].caption,"New");
+    sprintf(buttons_map_menu[maps_count+1].caption,"Back");
+    for(int i=0;i<maps_count+2;i++){
         blue_textures_map_menu[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_map_menu[i].caption, blue);
         black_textures_map_menu[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_map_menu[i].caption, black);
     }
@@ -38,7 +40,7 @@ void draw_map_menu(SDL_Renderer* renderer){
     SDL_Rect trect;
     SDL_RenderCopyEx(renderer, bg_menu, NULL, &rect, 0 ,NULL, 0); 
     //printf("the %d\n", maps_count);
-    for(int i=0;i<maps_count;i++){
+    for(int i=0;i<maps_count+2;i++){
         rect.x = buttons_map_menu[i].x;
         rect.y = buttons_map_menu[i].y;
         rect.w = buttons_map_menu[i].w;
@@ -59,7 +61,7 @@ void draw_map_menu(SDL_Renderer* renderer){
         }
     }
     draw_map(renderer);
-    draw_camps(renderer);
+    //draw_camps(renderer);
 }
 void detect_click_map_menu(SDL_Renderer* renderer, int x, int y, int count){
     for(int i=0;i<maps_count;i++){
@@ -69,17 +71,29 @@ void detect_click_map_menu(SDL_Renderer* renderer, int x, int y, int count){
             sprintf(path, "./maps/map%d.map", i+1);
             load_map(path);
             load_map_count("./maps/maps.map");
-            free(cities);
-            cities_count = 0;
-            cities = find_camps();
-            for(int i=0;i<cities_count;i++) cities[i].team =0;
+            for(int i=0;i<cities_count;i++) {cities[i].team =0;free(cities[i].dest_id);free(cities[i].soldiers_to_move);}
             for(int i=0;i<50;i++) cities_available[i] =0 ;
+            free(cities);
+            cities = find_camps();
             sprintf(path, "./maps/camps%d.cmp", i+1);
             load_map_camps(path);
+            free(soldiers);
+            soldiers_count =0;
+            max_soldiers_count=0;
+            soldiers = (Soldier*) malloc(sizeof(Soldier));
             first_init_soldiers();
         }
     }
-    if(count < 3)  detect_click_map_menu(renderer, x, y, count+1);
+    for(int i=maps_count;i<maps_count+2;i++){
+         if( x - buttons_map_menu[i].x <= buttons_map_menu[i].w && x - buttons_map_menu[i].x >= 0
+        &&  y - buttons_map_menu[i].y <= buttons_map_menu[i].h && y - buttons_map_menu[i].y >= 0){
+            if(i == maps_count){
+
+            }else if(i == maps_count+1){
+                window_state = 1;
+            }
+        }
+    }
 }
 
 

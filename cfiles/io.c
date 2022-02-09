@@ -104,7 +104,7 @@ void load_map_camps(char* path){
     FILE* f = fopen(path, "r");
     int pc ;
     fscanf(f, "%d", &pc);
-    for(int i=0;i<2*pc;i++){
+    for(int i=0;i<pc;i++){
         int index, team;
         fscanf(f, "%d%d", &index, &team);
         cities[index].team = team;
@@ -162,6 +162,7 @@ SDL_Texture *getTextTexture(SDL_Renderer *sdlRenderer, char* font_path, char* ca
 
 void init_textures(SDL_Renderer* renderer){
     user_name = (char*) malloc(sizeof(char) * 50);
+    user_name[0] = '\0';
     //planes
     blue_plane = getImageTexture(renderer,"./files/planes/blue.bmp");
     green_plane = getImageTexture(renderer,"./files/planes/green.bmp");

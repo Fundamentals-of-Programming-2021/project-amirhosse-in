@@ -67,6 +67,7 @@ int main() {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	SDL_Window* window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_width, window_height, SDL_WINDOW_OPENGL);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    printf("%d\n", sizeof(Soldier));
     messages = (Message*) malloc(sizeof(Message));
     game_generator(renderer);
     init_buttons(renderer);

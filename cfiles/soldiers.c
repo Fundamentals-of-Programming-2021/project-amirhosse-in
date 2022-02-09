@@ -55,6 +55,7 @@ void generate_soldier(int count, int team, int city_id){
 void first_init_soldiers(){
     for(int i=0;i<cities_count;i++){
         if(cities[i].team > 0){
+            printf("hello%d\n", soldiers_count);
             generate_soldier(primary_soldier_count, cities[i].team, cities[i].id);
         }
     }
@@ -62,11 +63,14 @@ void first_init_soldiers(){
 
 //this function recives a Soldier* and it's destination and set's it's speed
 void set_soldier_speed_and_dest(int x_src, int y_src, int x_dest, int y_dest, Soldier* soldier){
+    printf("salam %p\n", soldier);fflush(stdout);
     x_src *= map_cell_side; x_src += map_start_x;
     y_src *= map_cell_side; y_src += map_start_y;
     x_dest *= map_cell_side; x_dest += map_start_x;
     y_dest *= map_cell_side; y_dest += map_start_y;
+    printf("inja ham nabayad biad taban %d\n", sizeof(soldier->x));fflush(stdout);
     soldier->x = x_src;
+    printf("what about here\n");fflush(stdout);
     soldier->y = y_src;
     soldier->dest_x = x_dest;
     soldier->dest_y = y_dest;
@@ -212,6 +216,7 @@ void check_soldiers_collision(){
 
 //this function apply attack for 1,2 or more soldier in parallel lines
 void send_soldier(int base_city_index, int dest_city_index, int index){
+    printf("hello\n");fflush(stdout);
     //(X -  SIGN(DELTA_Y) * SIN(alpha) * L, Y + SIGN(DELTA_X) * COS(alpha) * L
     int X_b = cities[base_city_index].x,
         Y_b = cities[base_city_index].y,
@@ -224,8 +229,11 @@ void send_soldier(int base_city_index, int dest_city_index, int index){
     double alpha = delta_x != 0 ? atan(abs_delta_y / abs_delta_x) : 1.68;
     int to_move = cities[base_city_index].soldiers_to_move[index] > 2 ? 3 : cities[base_city_index].soldiers_to_move[index];
     int flag = 0;
+    printf("2\n");fflush(stdout);
     Soldier *first_soldier, *second_soldier, *third_soldier;
+    printf("3\n");fflush(stdout);
     for(int i=0;i<soldiers_count;i++){
+        printf("4\n");fflush(stdout);
         if( (soldiers+i)->city_id == cities[base_city_index].id && (soldiers+i)->dest_x == -1 ){
             soldiers[i].city_id = cities[dest_city_index].id;
             if(flag == 0) {
@@ -244,24 +252,31 @@ void send_soldier(int base_city_index, int dest_city_index, int index){
             }
         }
     }
+    printf("5?\n");fflush(stdout);
     double dx = sign(delta_y) * parallel_line_distance * sin(alpha);
     double dy = sign(delta_x) * parallel_line_distance * cos(alpha);
-    if(to_move > 2){   
+    printf("6\n");fflush(stdout);
+    if(to_move > 2){
+        printf("7:3 %p %p %p\n", first_soldier, second_soldier, third_soldier);fflush(stdout);   
         set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, first_soldier);
         set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , second_soldier);
         set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, third_soldier);
+        printf("inja ke nemiad?\n");fflush(stdout);
         cities[base_city_index].soldiers_to_move[index] -= 3;
         cities[base_city_index].soldier_counts -= 3;
     }else if(to_move == 2){
+        printf("7:2 %p %p\n", first_soldier, second_soldier);fflush(stdout);   
         set_soldier_speed_and_dest(X_b - dx, Y_b + dy, X_d - dx, Y_d + dy, second_soldier);
         set_soldier_speed_and_dest(X_b + dx, Y_b - dy, X_d + dx, Y_d - dy, first_soldier); 
         cities[base_city_index].soldiers_to_move[index] -= 2;
         cities[base_city_index].soldier_counts -= 2;
     }else if(to_move ==1){
+        printf("7:1 %p\n", first_soldier);fflush(stdout);   
         set_soldier_speed_and_dest(X_b , Y_b , X_d , Y_d , first_soldier);
         cities[base_city_index].soldiers_to_move[index] -= 1;
         cities[base_city_index].soldier_counts -= 1;
     }
+    printf("good bye\n"); fflush(stdout);
 }
 
 //this function calculate appriate angle for soldiers
