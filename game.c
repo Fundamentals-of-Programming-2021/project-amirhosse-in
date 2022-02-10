@@ -10,11 +10,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
-#include "./cfiles/io.c"
-#include "./cfiles/soldiers.c"
-#include "./cfiles/map.c"
+#include "./cfiles/io.h"
+#include "./cfiles/soldiers.h"
+#include "./cfiles/map.h"
 #include "./cfiles/explosion.h"
 #include "./cfiles/ai.h"
+#include "./cfiles/getuser.h"
+#include "./cfiles/menu.h"
+#include "./cfiles/map_menu.h"
+#include "./cfiles/potions.h"
+#include "./cfiles/standing.h"
 
 //this function initialize primary thing like generating map and etc.
 void game_generator(SDL_Renderer* renderer){

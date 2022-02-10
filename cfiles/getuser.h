@@ -7,8 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
-#include "global.c"
-#include "io.c"
+#include "global.h"
+#include "io.h"
 SDL_Texture* user_name_texture;
 SDL_Rect user_name_rect;
 Button  buttons_get_user[1];
@@ -38,7 +38,15 @@ void init_primary_textures_getuser(SDL_Renderer* renderer){
     caption_get_user_rect.y = 400;
     SDL_QueryTexture(caption_get_user, NULL, NULL, &caption_get_user_rect.w, &caption_get_user_rect.h);
 }
-
+void destroy_textures_getuser(){
+    free(buttons_get_user[0].caption);
+    for(int i=0;i<buttons_count_get_user;i++){
+        SDL_DestroyTexture(blue_captions_get_user[i]);
+        SDL_DestroyTexture(black_captions_get_user[i]);
+    }
+    SDL_DestroyTexture(caption_get_user);
+    
+}
 void create_new_username_texture(SDL_Renderer* renderer, char* name){
     SDL_DestroyTexture(user_name_texture);
     user_name_texture = getTextTexture(renderer, "./files/fonts/liber.ttf", name, black);
@@ -126,6 +134,7 @@ void detect_click_get_user(SDL_Renderer* renderer, int x, int y){
                             login(renderer);
                         }
                         window_state = 1;
+                        destroy_textures_getuser();
                     }
                 }break;
             }

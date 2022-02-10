@@ -7,12 +7,12 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
-#include "io.c"
+#include "global.h"
+#include "io.h"
 #include "explosion.h"
 #include <SDL2/SDL_mixer.h>
 #include "ai.h"
-#include "camps.c"
+#include "camps.h"
 
 //prototypes
 void check_soldiers_collision();

@@ -8,8 +8,8 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
-#include "io.c"
+#include "global.h"
+#include "io.h"
 
 //prototypes
 void create_explosion(int x, int y);

@@ -8,9 +8,9 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
-#include "soldiers.c"
-#include "camps.c"
+#include "global.h"
+#include "soldiers.h"
+#include "camps.h"
 #pragma once
 int city_border[4000][2] ;
 void draw_explosions(SDL_Renderer* renderer);

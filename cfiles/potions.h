@@ -7,7 +7,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
+#include "global.h"
 
 void create_potion(){
     if(potions_count == 0){
@@ -33,8 +33,8 @@ void create_potion(){
     potions[potions_count-1].time = start_ticks;
 }
 void potion_collision(int soldier_index, int potion_index){
-    if(abs_double(soldiers[soldier_index].x - potions[potion_index].x) < minimum_length_for_collision
-    && abs_double(soldiers[soldier_index].y - potions[potion_index].y) < minimum_length_for_collision){
+    if(abs_double(soldiers[soldier_index].x - potions[potion_index].x) < 16
+    && abs_double(soldiers[soldier_index].y - potions[potion_index].y) < 16){
         potion_state[soldiers[soldier_index].team] = potions[potion_index].type + 1;
         potions[potion_index].is_used = 1;
         potions[potion_index].team = soldiers[soldier_index].team;
@@ -67,7 +67,7 @@ void potion_watcher(){
     }
     if(start_ticks > next_potion_tick * 1000){
         create_potion();
-        next_potion_tick = (start_ticks/1000) + (rand()%4)+7;
+        next_potion_tick = (start_ticks/1000) + (rand()%4)+3;
     }
 }
 void draw_potions(SDL_Renderer* renderer){

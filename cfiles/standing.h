@@ -9,7 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
-#include "io.c"
+#include "io.h"
 
 SDL_Texture **standing_names;
 SDL_Texture **standing_scores;
@@ -34,11 +34,11 @@ void init_textures_standing(SDL_Renderer* renderer){
 }
 void destory_textures_standing(){
     for(int i=0;i<users_to_show+1;i++){
-        free(standing_names[i]);
-        free(standing_scores[i]);
+        SDL_DestroyTexture(standing_names[i]);
+        SDL_DestroyTexture(standing_scores[i]);
     }
-    free(back_button_standing[0]);
-    free(back_button_standing[1]);
+    SDL_DestroyTexture(back_button_standing[0]);
+    SDL_DestroyTexture(back_button_standing[1]);
     free(back_button_standing);
     free(standing_names);
     free(standing_scores);

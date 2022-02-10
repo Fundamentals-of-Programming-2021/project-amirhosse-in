@@ -7,13 +7,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
-#include "global.c"
-#include "io.c"
+#include "global.h"
+#include "io.h"
 SDL_Texture** blue_textures_map_menu;
 SDL_Texture** black_textures_map_menu;
 Button *buttons_map_menu;
+Button buttons_players_count[3];
+int selected_players = -1;
 void init_buttons_map_menu(SDL_Renderer* renderer){
     load_map_count("./maps/maps.map");
+    selected_players = -1;
     blue_textures_map_menu = malloc(sizeof(SDL_Texture*) * (maps_count+2));
     black_textures_map_menu = malloc(sizeof(SDL_Texture*) * (maps_count+2));
     buttons_map_menu = malloc(sizeof(Button) * (2+maps_count));
@@ -33,14 +36,22 @@ void init_buttons_map_menu(SDL_Renderer* renderer){
         blue_textures_map_menu[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_map_menu[i].caption, blue);
         black_textures_map_menu[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_map_menu[i].caption, black);
     }
+    for(int i=0;i<3;i++){
+        buttons_players_count[i].x = 10 + 60*i;
+        buttons_players_count[i].y = 740;
+        buttons_players_count[i].h = 50;
+        buttons_players_count[i].w = 50;
+    }
 }
 void destory_buttons_map_menu(){
-    free(blue_textures_map_menu);
-    free(black_textures_map_menu);
     for(int i=0;i<maps_count+2;i++){
+        SDL_DestroyTexture(blue_textures_map_menu[i]);
+        SDL_DestroyTexture(black_textures_map_menu[i]);
         free(buttons_map_menu[i].caption);
     }
     free(buttons_map_menu);
+    free(blue_textures_map_menu);
+    free(black_textures_map_menu);
 }
 void draw_map_menu(SDL_Renderer* renderer){
     SDL_Rect rect = {.x=0 , .y = 0, .w = window_width, .h = window_height};
@@ -66,6 +77,9 @@ void draw_map_menu(SDL_Renderer* renderer){
             trect.y += (rect.h - trect.h)/2;
             SDL_RenderCopyEx(renderer, black_textures_map_menu[i], NULL, &trect, 0 ,NULL, 0); 
         }
+    }
+    for(int i=0;i<3;i++){
+        
     }
     draw_map(renderer);
     //draw_camps(renderer);

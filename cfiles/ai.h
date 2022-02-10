@@ -7,8 +7,8 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
-#include "camps.c"
+#include "global.h"
+#include "camps.h"
 //prototypes
 int is_city_under_attack(int city_index);
 int is_city_attacking(int city_index);
@@ -165,8 +165,11 @@ void ai(){
                 ai_tick[team_i] += rand()%5;
             }
             final_dest = -1;
+            free(team_city);
         }
     }
+    free(city);
+    free(final_cities);
 }
 
 //this function applies a attack

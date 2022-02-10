@@ -4,15 +4,12 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c" 
-#include "io.c"
+#include "global.h" 
+#include "io.h"
 #include <SDL2/SDL_ttf.h>
-#include "map_menu.c"
-#include "standing.c"
-Button  buttons[4];
-SDL_Texture* blue_captions[4];
-SDL_Texture* black_captions[4];
-int buttons_count = 3;
+#include "map_menu.h"
+#include "standing.h"
+
 void init_buttons(SDL_Renderer* renderer){
     SDL_Color black_color = {0,0,0};
     SDL_Color blue_color = {0,0,255};
@@ -31,6 +28,7 @@ void init_buttons(SDL_Renderer* renderer){
         black_captions[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons[i].caption, black_color);
     }
 }
+
 void draw_buttons(SDL_Renderer* renderer){
     SDL_Rect main_button_rect = {.x=0 , .y = 0, .w = window_width, .h = window_height};
     SDL_Rect text_rect;

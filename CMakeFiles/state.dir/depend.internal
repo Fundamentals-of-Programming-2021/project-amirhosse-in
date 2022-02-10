@@ -3,17 +3,17 @@
 
 CMakeFiles/state.dir/main.c.o
  /home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.h
  /home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
- /home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/map.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.h
+ /home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.h
  /home/amirhossein/Documents/project-amirhosse-in/game.c
  /home/amirhossein/Documents/project-amirhosse-in/game.h
  /home/amirhossein/Documents/project-amirhosse-in/main.c

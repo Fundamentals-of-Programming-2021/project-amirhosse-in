@@ -4,13 +4,8 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "game.h"
 #include "game.c"
-#include "./cfiles/menu.c"
-#include "./cfiles/getuser.c"
-#include "./cfiles/map_menu.c"
-#include "./cfiles/potions.c"
-#include "./cfiles/standing.c"
+
 int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -107,6 +102,7 @@ int main() {
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS );
     }
+    clean_memory();
     Mix_FreeChunk(explosion_effect);
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);

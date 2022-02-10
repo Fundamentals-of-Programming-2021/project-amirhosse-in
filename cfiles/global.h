@@ -164,7 +164,10 @@ Mix_Chunk *explosion_effect;
 SDL_Texture *bg_menu;
 SDL_Texture *bg_game;
 SDL_Texture *btn_main;
-
+Button  buttons[4];
+SDL_Texture* blue_captions[4];
+SDL_Texture* black_captions[4];
+int buttons_count = 3;
 
 //ranking
 int user_counts = 0;

@@ -7,9 +7,10 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "global.c"
-#include "map.c"
+#include "global.h"
+#include "map.h"
 #include <SDL2/SDL_ttf.h>
+
 // prototype 
 SDL_Texture *getImageTexture(SDL_Renderer *sdlRenderer, char *image_path);
 void my_audio_callback(void *userdata, Uint8 *stream, int len);
@@ -104,6 +105,7 @@ void load_map_camps(char* path){
     FILE* f = fopen(path, "r");
     int pc ;
     fscanf(f, "%d", &pc);
+    players_count = pc;
     for(int i=0;i<pc;i++){
         int index, team;
         fscanf(f, "%d%d", &index, &team);
@@ -219,5 +221,42 @@ void init_textures(SDL_Renderer* renderer){
     winning_caption[2] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Green Won",black);
     winning_caption[3] = getTextTexture(renderer,"./files/fonts/liber.ttf" , "Gray Won",black);
 }
+void clean_memory(){
+    free(user_name);
+    SDL_DestroyTexture(blue_plane);
+    SDL_DestroyTexture(gray_plane);
+    SDL_DestroyTexture(red_plane);
+    SDL_DestroyTexture(green_plane);
 
+    SDL_DestroyTexture(red_camp);
+    SDL_DestroyTexture(blue_camp);
+    SDL_DestroyTexture(green_camp);
+    SDL_DestroyTexture(gray_camp);
+    SDL_DestroyTexture(brown_camp);
+
+    SDL_DestroyTexture(bg_game);
+    SDL_DestroyTexture(bg_menu);
+    SDL_DestroyTexture(btn_main);
+    for(int i=0;i<6;i++) SDL_DestroyTexture(potions_texture[i]);
+    for(int i=0;i<4;i++) SDL_DestroyTexture(winning_caption[i]);
+
+    //Objects
+    free(explosions);
+    free(messages);
+    if(max_potions_count!=0)free(potions);
+    for(int j=0;j<cities_count;j++) {free(cities[j].dest_id);free(cities[j].soldiers_to_move);}
+    free(cities);
+    free(soldiers);
+    //io things
+    for(int i=0;i<user_counts;i++)free(user_names[i]);
+    free(user_names);
+    free(users_scores);
+    //menu textures
+    for(int i=0;i<buttons_count;i++){
+        SDL_DestroyTexture(blue_captions[i]);
+        SDL_DestroyTexture(black_captions[i]);
+        free(buttons[i].caption);
+    }
+
+}
 #endif

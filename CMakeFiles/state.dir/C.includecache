@@ -21,12 +21,12 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-camps.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+camps.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.h
 time.h
 -
 stdio.h
@@ -45,12 +45,12 @@ SDL2/SDL_mixer.h
 -
 SDL2/SDL_ttf.h
 -
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-soldiers.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+soldiers.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.h
 
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
 time.h
@@ -67,12 +67,12 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.h
 stdio.h
 -
 stdbool.h
@@ -87,12 +87,12 @@ SDL2/SDL2_gfxPrimitives.h
 -
 SDL2/SDL_ttf.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
 stdio.h
 -
 SDL2/SDL_mixer.h
@@ -102,7 +102,7 @@ SDL2/SDL.h
 SDL2/SDL2_gfxPrimitives.h
 -
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 time.h
 -
 stdio.h
@@ -117,14 +117,14 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-map.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+map.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.h
 SDL2/SDL_ttf.h
 -
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.h
 time.h
 -
 stdio.h
@@ -139,14 +139,14 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-soldiers.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
-camps.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+soldiers.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.h
+camps.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.h
 stdio.h
 -
 stdbool.h
@@ -161,12 +161,12 @@ SDL2/SDL2_gfxPrimitives.h
 -
 SDL2/SDL_ttf.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.h
 stdio.h
 -
 SDL2/SDL_mixer.h
@@ -175,18 +175,18 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 SDL2/SDL_ttf.h
 -
-map_menu.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
-standing.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
+map_menu.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.h
+standing.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.h
 time.h
 -
 stdio.h
@@ -201,10 +201,10 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.h
 time.h
 -
 stdio.h
@@ -219,20 +219,20 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-global.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.c
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+global.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/global.h
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 explosion.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
 SDL2/SDL_mixer.h
 -
 ai.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
-camps.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.c
+camps.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/camps.h
 
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.h
 time.h
 -
 stdio.h
@@ -249,8 +249,8 @@ SDL2/SDL2_gfxPrimitives.h
 -
 SDL2/SDL_ttf.h
 -
-io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
+io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
 
 /home/amirhossein/Documents/project-amirhosse-in/game.c
 game.h
@@ -271,16 +271,26 @@ SDL2/SDL2_gfxPrimitives.h
 -
 SDL2/SDL_ttf.h
 -
-./cfiles/io.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.c
-./cfiles/soldiers.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.c
-./cfiles/map.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.c
+./cfiles/io.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/io.h
+./cfiles/soldiers.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/soldiers.h
+./cfiles/map.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map.h
 ./cfiles/explosion.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/explosion.h
 ./cfiles/ai.h
 /home/amirhossein/Documents/project-amirhosse-in/cfiles/ai.h
+./cfiles/getuser.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.h
+./cfiles/menu.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.h
+./cfiles/map_menu.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.h
+./cfiles/potions.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.h
+./cfiles/standing.h
+/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.h
 
 /home/amirhossein/Documents/project-amirhosse-in/game.h
 stdio.h
@@ -299,18 +309,6 @@ SDL2/SDL.h
 -
 SDL2/SDL2_gfxPrimitives.h
 -
-game.h
-/home/amirhossein/Documents/project-amirhosse-in/game.h
 game.c
 /home/amirhossein/Documents/project-amirhosse-in/game.c
-./cfiles/menu.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/menu.c
-./cfiles/getuser.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/getuser.c
-./cfiles/map_menu.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/map_menu.c
-./cfiles/potions.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/potions.c
-./cfiles/standing.c
-/home/amirhossein/Documents/project-amirhosse-in/cfiles/standing.c
 
