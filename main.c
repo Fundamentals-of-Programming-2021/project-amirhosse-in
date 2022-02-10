@@ -102,6 +102,7 @@ int main() {
     	SDL_RenderPresent(renderer);
         SDL_Delay ( 1000 / FPS );
     }
+    TTF_Quit();
     clean_memory();
     Mix_FreeChunk(explosion_effect);
     Mix_CloseAudio();

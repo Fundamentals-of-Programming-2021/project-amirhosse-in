@@ -162,7 +162,7 @@ void ai(){
                 for(int i=0;i<final_cities_count;i++){
                     attack(cities[final_cities[i]].id, cities[final_dest].id,0);
                 }
-                ai_tick[team_i] += rand()%5;
+                //ai_tick[team_i] += rand()%5;
             }
             final_dest = -1;
             free(team_city);
