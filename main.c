@@ -4,7 +4,7 @@
 #include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include "game.c"
+#include "./src/game.h"
 
 int handleEvents(SDL_Renderer* renderer) {
     SDL_Event event;

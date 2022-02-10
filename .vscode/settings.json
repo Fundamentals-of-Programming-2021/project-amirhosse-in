@@ -12,6 +12,7 @@
         "sdl.h": "c",
         "math.h": "c",
         "camps.h": "c",
-        "standing.h": "c"
+        "standing.h": "c",
+        "getuser.h": "c"
     }
 }
