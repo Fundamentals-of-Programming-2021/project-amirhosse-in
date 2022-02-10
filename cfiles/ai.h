@@ -125,7 +125,7 @@ void ai(){
     int final_cities_count = 0;
     int final_dest = -1;
     for(int team_i = 1;team_i <= players_count; team_i++){
-        if( team_i != player_id && start_ticks > ai_tick[team_i] * 3000){
+        if( team_i != player_id && start_ticks > ai_tick[team_i] * 1000){
             //finding all cities that belongs to the team
             int city_count = team_city_counter(team_i);
             int* team_city = team_city_finder(city_count, team_i);

@@ -8,18 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "global.c"
-typedef struct Potion{
-    int type;
-    int time;
-    int is_used;
-    int team;
-    int x;
-    int y;
-} Potion;
-int max_potions_count = 0;
-int potions_count = 0;
-int last_potion_tick = 0;
-Potion* potions;
+
 void create_potion(){
     if(potions_count == 0){
         potions = (Potion*) malloc(sizeof(Potion));
@@ -76,9 +65,9 @@ void potion_watcher(){
             i--;
         }
     }
-    if(start_ticks - last_potion_tick > 8000){
+    if(start_ticks > next_potion_tick * 1000){
         create_potion();
-        last_potion_tick = start_ticks;
+        next_potion_tick = (start_ticks/1000) + (rand()%4)+7;
     }
 }
 void draw_potions(SDL_Renderer* renderer){

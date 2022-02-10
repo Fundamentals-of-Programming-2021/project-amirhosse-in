@@ -67,6 +67,18 @@ void detect_click(SDL_Renderer* renderer, int x, int y){
                         add_new_message("You must log in first!", red, 0);
                     }else{
                         window_state = 2;
+                        init_buttons_camps(renderer);
+                        if(paused_tick != 0){
+                            for(int j=0;j<5;j++) ai_tick[j] += (start_ticks - paused_tick)/1000;
+                            next_potion_tick += (start_ticks - paused_tick)/1000;
+                            for(int j=0;j<potions_count;j++) potions[j].time += (start_ticks - paused_tick);
+                            paused_tick=0;
+                        }else{
+                            for(int j=0;j<5;j++){
+                                ai_tick[j]=(start_ticks/1000) + rand()%5;
+                                next_potion_tick = rand()%5;
+                            }
+                        }
                     }
                 }break;
                 case 1:{//Standing

@@ -24,7 +24,74 @@ City* find_camps();
 void assign_camps_to_players();
 int team_number_to_city_index(int team);
 int id_to_city_index(int map_number);
-
+void first_init_soldiers();
+Button  buttons_game[4];
+SDL_Texture* blue_captions_game[4];
+SDL_Texture* black_captions_game[4];
+int buttons_count_game = 2;
+void init_buttons_camps(SDL_Renderer* renderer){
+    for(int i=0;i<buttons_count_game;i++){
+        buttons_game[i].x = 770;
+        buttons_game[i].y = 630 + 80*i;
+        buttons_game[i].w =175;
+        buttons_game[i].h = 70;
+        buttons_game[i].caption = (char*) malloc(sizeof(char) * 50);
+    }
+    sprintf(buttons_game[0].caption , "Pause");
+    sprintf(buttons_game[1].caption , "Stop");
+    for(int i=0;i<buttons_count_game;i++){
+        blue_captions_game[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_game[i].caption, blue);
+        black_captions_game[i] = getTextTexture(renderer, "./files/fonts/liber.ttf", buttons_game[i].caption, black);
+    }
+}
+void draw_buttons_camps(SDL_Renderer* renderer){
+    SDL_Rect r;
+    for(int i=0;i<buttons_count_game;i++){
+        r.x = buttons_game[i].x;
+        r.y = buttons_game[i].y;
+        r.h = buttons_game[i].h;
+        r.w = buttons_game[i].w;
+        SDL_RenderCopyEx(renderer, btn_main, NULL, &r, 0,NULL,SDL_FLIP_NONE);
+        SDL_QueryTexture(blue_captions_game[i], NULL, NULL, &r.w, &r.h);
+        r.x += (buttons_game[i].w - r.w) /2;
+        r.y += (buttons_game[i].h - r.h) /2;
+        if(current_mouse_x - buttons_game[i].x <= buttons_game[i].w && current_mouse_x - buttons_game[i].x >= 0
+        && current_mouse_y - buttons_game[i].y <= buttons_game[i].h && current_mouse_y - buttons_game[i].y >= 0){
+            SDL_RenderCopyEx(renderer, blue_captions_game[i], NULL, &r, 0, NULL, SDL_FLIP_NONE);
+        }else{
+            SDL_RenderCopyEx(renderer, black_captions_game[i], NULL, &r, 0, NULL, SDL_FLIP_NONE);
+        }
+    }
+}
+void detect_click_camps( int x, int y){
+    for(int i=0;i<buttons_count_game;i++){
+        if(x - buttons_game[i].x <= buttons_game[i].w && x >= buttons_game[i].x
+        && y - buttons_game[i].y <= buttons_game[i].h && y >= buttons_game[i].y)
+        {
+            switch(i){
+                case 0:{//pause
+                    paused_tick = start_ticks;
+                    window_state = 1;
+                }break;
+                case 1:{//stop
+                    for(int j=0;j<cities_count;j++) {cities[j].team =0;free(cities[j].dest_id);free(cities[j].soldiers_to_move);}
+                    for(int j=0;j<50;j++) cities_available[j] =0 ;
+                    free(cities);
+                    cities = find_camps();
+                    assign_camps_to_players();
+                    for(int j=0;j<cities_count;j++)if(cities[j].team!=0) cities[j].soldier_counts=0;
+                    free(soldiers);
+                    soldiers_count =0;
+                    max_soldiers_count=0;
+                    soldiers = (Soldier*) malloc(sizeof(Soldier));
+                    first_init_soldiers();
+                    window_state = 1;
+                    paused_tick = 0;
+                }break;
+            }
+        }
+    }
+}
 //this function is used by find_camps() to check a cell is appropriate for a camp or not
 int check_is_valid_camp(int row, int column){
     int base_color = map[row][column];
@@ -182,6 +249,7 @@ void draw_camps(SDL_Renderer* renderer){
         stringRGBA(renderer, x +20, y + 3, buffer, 255,255,255,255);
     }
     draw_standing(renderer);
+    draw_buttons_camps(renderer);
     free(buffer);
 }
 void draw_standing(SDL_Renderer* renderer){
@@ -232,4 +300,5 @@ void draw_standing(SDL_Renderer* renderer){
         }
     }
 }
+
 #endif

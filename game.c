@@ -16,8 +16,6 @@
 #include "./cfiles/explosion.h"
 #include "./cfiles/ai.h"
 
-//protypes
-
 //this function initialize primary thing like generating map and etc.
 void game_generator(SDL_Renderer* renderer){
     load_user_names();
@@ -30,9 +28,6 @@ void game_generator(SDL_Renderer* renderer){
     srand(time(NULL));
     int city_count = rand()%5+40;
     soldiers = (Soldier*) malloc(sizeof(Soldier));
-    for(int i=0;i<5;i++){
-        ai_tick[i]=rand()%5;
-    }
     explosions = (Explosion*) malloc(sizeof(Soldier));
     //map_generator( &city_count);
     load_map("map1.map");
@@ -69,6 +64,7 @@ void mouse_hover(SDL_Renderer* renderer, int x, int y,int pressed_x, int pressed
 
 //when user leave the mouse up, we call this functino to detect attack
 void detect_attack(int base_x, int base_y, int dest_x, int dest_y){
+    detect_click_camps(dest_x, dest_y);
     if(dest_x >= map_start_x && dest_y >= map_start_y && base_x >= map_start_x && base_y >= map_start_y
     && dest_x < map_start_x + map_width && dest_y < map_start_y+map_height && base_x < map_start_x + map_width && base_y < map_start_y+map_height){
         base_x -= map_start_x; base_x /= map_cell_side;
@@ -102,6 +98,9 @@ void win(SDL_Renderer* renderer){
         if(online_teams[i])winner=i;
     }
     if(online_teams_count == 1){
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000);
+        paused_tick =0;
         if(winner == 1){
             users_scores[user_id] += 30;
         }

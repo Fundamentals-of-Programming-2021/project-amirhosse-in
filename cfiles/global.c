@@ -17,6 +17,15 @@ typedef struct Soldier{
     double angle;
 } Soldier;
 
+typedef struct Potion{
+    int type;
+    int time;
+    int is_used;
+    int team;
+    int x;
+    int y;
+} Potion;
+
 typedef struct City{
     int id;
     int x;
@@ -197,6 +206,11 @@ void messages_watcher(SDL_Renderer* renderer){
 SDL_Texture* potions_texture[6];
 int potion_state[5];
 int potion_impact_time = 6000;
+int paused_tick = 0;
+int next_potion_tick = 0;
+int max_potions_count = 0;
+int potions_count = 0;
+Potion* potions;
 //1: out soldiers speed * 2
 //2: fix enemy's soldiers
 //3: enemy's soldiers's speed / 2
